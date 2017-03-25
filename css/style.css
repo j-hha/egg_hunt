@@ -5,6 +5,11 @@
   /*border: 1px dotted black;*/
 }
 
+body {
+  font-family: 'Amatica SC', cursive;
+  background-color: #f2f2f2;
+}
+
 a {
   color: rgb(255,39,52);
 }
@@ -19,11 +24,6 @@ a:visited {
 
 a:visited:hover {
   color: rgb(225,117,28);
-}
-
-body {
-  font-family: 'Amatica SC', cursive;
-  background-color: #f2f2f2;
 }
 
 header h1, h2 {
@@ -58,6 +58,14 @@ th {
 
 #game-board {
   height: 28em;
+  position: relative;
+}
+
+#fox {
+  width: 20%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 #controls nav ul {
