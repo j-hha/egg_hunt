@@ -2,7 +2,28 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  border: 1px dotted black;
+  /*border: 1px dotted black;*/
+}
+
+a {
+  color: rgb(255,39,52);
+}
+
+a:hover {
+  color: rgb(225,117,28);
+}
+
+a:visited {
+  color: rgb(178,27,36);
+}
+
+a:visited:hover {
+  color: rgb(225,117,28);
+}
+
+body {
+  font-family: 'Amatica SC', cursive;
+  background-color: #f2f2f2;
 }
 
 header h1, h2 {
@@ -11,16 +32,32 @@ header h1, h2 {
   align-items: center;
 }
 
+header h1 {
+  font-size: 6em;
+  line-height: 1;
+}
+
+header h2 {
+  font-size: 1.5em;
+  line-height: 2;
+}
+
+main {
+  background-color: rgba(50,50,50, 1);
+  color: #f2f2f2;
+}
+
 table {
   width: 100%;
 }
 
 th {
   width: calc(100% / 3);
+  font-size: 2em;
 }
 
 #game-board {
-  height: 30em;
+  height: 28em;
 }
 
 #controls nav ul {
@@ -28,10 +65,18 @@ th {
   justify-content: space-around;
   align-items: center;
   list-style: none;
+  font-size: 2em;
+}
+
+article {
+  font-family: 'Open Sans Condensed', sans-serif;
+  padding: 3em 5%;
+  font-size: 1.5em;
 }
 
 footer {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  text-align: center;
 }
