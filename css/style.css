@@ -4,3 +4,34 @@
   box-sizing: border-box;
   border: 1px dotted black;
 }
+
+header h1, h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  width: calc(100% / 3);
+}
+
+#game-board {
+  height: 30em;
+}
+
+#controls nav ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
