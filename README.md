@@ -13,9 +13,10 @@
 - Barn with 10 eggs positioned on the right hand side of screen 
 - Between barn and fox are several hiding spots for the fox, eg bush, tree
 - Fox has to make it to the barn to steal his dinner
-- BUT farmer regularly wakes up, moon randomly appears from behind the clouds and exposes the fox, chickens randomly wake up
+- BUT farmer regularly wakes up and throws shoes to scare fox off
+- additional difficulty: moon randomly appears from behind the clouds and exposes the fox, chickens randomly wake up, dog randomly wakes up --> if these things occur, farmer will wake up, too and throw shoe with higher chance of scaring fox off
 - If fox has found cover when this happens, fox may move on
-- Else if fox has not taken cover, fox is caught by farmer, loses health point (HP) and loses the round
+- Else if fox has not taken cover, fox has a high random chance to be scared off by farmer, loses health point (HP) and loses the round
 - If fox makes it to the barn, farmer loses one egg and fox wins the round 
 
 *Rounds to play:* 10 - 20 rounds
