@@ -16,6 +16,7 @@ a {
 
 a:hover {
   color: rgb(225,117,28);
+  font-weight: bold;
 }
 
 a:visited {
@@ -90,7 +91,15 @@ th {
   justify-content: space-around;
   align-items: center;
   list-style: none;
-  font-size: 2em;
+}
+
+#options-bar nav ul li {
+  font-size: 2.5em;
+}
+
+#options-bar nav ul li:hover {
+  color: rgb(255,39,52);
+  font-weight: bold;
 }
 
 article {

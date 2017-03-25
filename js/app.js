@@ -8,11 +8,18 @@ $(function() {
     $fox: $('#fox')
   };
 
+  //
+  var gameLogic = {
+    getCurrentPos: function(element) {
+      // function gets the current position of the element that is passed in as a parameter
+      return element.offset();
+    }
+  }
+
   // object stores event handlers
   var eventHandlers = {
     // function moves background behind fox from right to left when right arrow is pressed --> fox moves in opposite direction in order to ensure that fox always remains visible --> gives impression that fox moves forward
     moveFox: function() {
-          console.log('eventHandlers.moveFox is being called');
       // binds event to right arrow key
       if (event.which == 38) {
         event.preventDefault();
@@ -23,11 +30,14 @@ $(function() {
       domElements.$gameBoard.css('right', pos + 'px');
       // updates position of fox in css using value update from moveForward function
       domElements.$fox.css('left', posFox + 'px');
+      // currently just for testing: logs current position of fox
+      console.log(gameLogic.getCurrentPos(domElements.$fox));
     }
   };
 
   //eventListeners
   $(document).keydown(eventHandlers.moveFox);
+
 });
 
 // global variables
@@ -42,4 +52,4 @@ var movementFunctionality = {
     pos += 10;
     posFox += 11;
   }
-}
+};
