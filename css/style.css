@@ -43,11 +43,13 @@ header h2 {
 }
 
 main {
-  background: -webkit-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
+  background: rgba(50,50,50, 1);
+  /*background: -webkit-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
   background: -o-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
   background: -moz-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
-  background: linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
+  background: linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));*/
   color: #f2f2f2;
+  overflow: hidden;
 }
 
 table {
@@ -60,14 +62,26 @@ th {
 }
 
 #game-board {
+  width: 300%;
   height: 28em;
   position: relative;
 }
 
 #fox {
-  width: 20%;
+  width: 8%;
   position: absolute;
-  left: 0;
+  left: 20px;
+  bottom: 0;
+}
+
+#grass {
+  width: 300%;
+  height: 4em;
+  background-image: url("../img/grass.svg");
+  background-position: top;
+  background-size: contain;
+  background-repeat: repeat-x;
+  position: absolute;
   bottom: 0;
 }
 
