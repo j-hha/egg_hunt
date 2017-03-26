@@ -27,9 +27,9 @@ $(function() {
       // if fox is within 100px +/- of hiding spot, fox is considered hidden
       if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
         console.log('FOX IS HIDDEN');
-        fox.isHidden = true;
+        playerOne.isHidden = true;
       } else {
-        fox.isHidden = false;
+        playerOne.isHidden = false;
       }
     }
   };
@@ -38,19 +38,20 @@ $(function() {
   var viewUpdates = {
     // updates status bar to reflect current health points
     updateHealth: function() {
-      for (var i = fox.points; i>=1; i--) {
+      var currentHealth = playerOne.getPoints();
+      for (var i = currentHealth; i>=1; i--) {
         domElements.$health.append($('<span>').html('&#x2764;'));
       }
     },
     // updates status bar to reflect current # of eggs in barn
     updateEggs: function() {
-      for (var i = farmer.points; i>=1; i--) {
+      for (var i = playerTwo.getPoints(); i>=1; i--) {
         domElements.$eggs.append($('<span>').html('&#x2b2e;'));
       }
     },
     // updates status bar to reflect current turn #
     updateTurn: function() {
-      domElements.$turn.append($('<span>').html('night ' + numOfTurn));
+      domElements.$turn.append($('<span>').html('night ' + game.numOfTurn));
     }
   };
 
@@ -67,7 +68,7 @@ $(function() {
       // updates position of background in css using value update from moveForward function
       domElements.$gameBoard.css('right', movementFunctionality.pos + 'px');
       // updates position of fox in css using value update from moveForward function
-      domElements.$fox.css('left', fox.pos + 'px');
+      domElements.$fox.css('left', playerOne.getPos() + 'px');
 
       // currently just for TESTING: logs current position of fox and compares them
       console.log('fox');
@@ -91,41 +92,78 @@ $(function() {
 
 // Hello Vanilla JavaScript
 
-// player objects
+// player object
+var Player = {
+  basicPlayer: function() {
+    // private property stores initial # health points or eggs, is inherited by fox and farmer
+    var points = 10,
+    // sets var self equal to this
+        self = this;
 
-// the fox
-var fox = {
-  // initial # health points
-  points: 10,
-  // initial starting position on screen
-  pos: 20,
-  // tracks if fox is hidden (true) or not (false)
-  isHidden: false,
-  // tracks if fox is in a danger zone (true) or not (false)
-  inDangerZone: false,
-}
+    // public method returns current # of points
+    self.getPoints = function() {
+      return points;
+    };
 
-// the farmer
-var farmer = {
-  // initial # of eggs
-  points: 10,
-  // tracks if farmer can be awoken (true) or not (false)
-  rousable: false,
-  // method returns random number that represents a show throw
-  throwShoe: function() {
-    return Math.random();
+    // public method reduces # of points when called
+    self.updatePoints = function() {
+      points--;
+    };
   },
-  // method determines chances of scaring fox off
-  chanceToScareOff: function() {
-    if (fox.isHidden) {
-      //if fox is hidden, chance to scare off is zero
-      return 0;
-    } else if (fox.inDangerZone) {
-      //if fox is in a danger zone, chance to scare off is 90%
-      return Math.random() * .9;
+
+  // the fox
+  fox: function() {
+    // inherits from basicPlayer
+    Player.basicPlayer.call(this);
+
+    // sets var self equal to this
+    var self = this;
+
+    // initial starting position on screen
+    var pos = 20;
+
+    // public method returns current # of points
+    self.getPos = function() {
+      return pos;
+    };
+    // public method reduces # of points when called
+    self.updatePos = function() {
+      pos += 11;
+    };
+
+    // tracks if fox is hidden (true) or not (false)
+    self.isHidden = false;
+    // tracks if fox is in a danger zone (true) or not (false)
+    self.inDangerZone = false;
+  },
+
+  // the farmer
+  farmer: function(points) {
+    // inhertis from basicPlayer
+    Player.basicPlayer.call(this);
+
+    // sets var self equal to this
+    var self = this;
+
+    // tracks if farmer can be awoken (true) or not (false)
+    self.rousable = false;
+    // method returns random number that represents a show throw
+    self.throwShoe = function() {
+      return Math.random();
+    };
+
+    // method determines chances of scaring fox off
+    self.chanceToScareOff = function() {
+      if (fox.isHidden) {
+        // if fox is hidden, chance to scare off is zero
+        return 0;
+      } else if (fox.inDangerZone) {
+        // if fox is in a danger zone, chance to scare off is 90%
+        return Math.random() * .9;
+      }
+      // in all other cases, chance to scare off is 50%
+      return Math.random() * .5;
     }
-    //in all other cases, chance to scare off is 50%
-    return Math.random() * .5;
   }
 }
 
@@ -138,22 +176,32 @@ var movementFunctionality = {
     // background pos is increased by ten
     this.pos += 10;
     // fox's pos is increased by eleven
-    fox.pos += 11;
+    console.log(playerOne.getPos());
+    playerOne.updatePos();
+    console.log(playerOne.getPos());
   }
 };
 
 // game object holds variables and methods essential to the game flow
 var game = {
+  // current turn #
   numOfTurn: 1,
+  // method checks if farmer has managed to scare fox off
   checkStatus: function() {
-   var thisShot = farmer.throwShoe(),
-       thisChance = farmer.chanceToScareOff();
+    // gets random Number representing farmers shot
+   var thisShot = playerTwo.throwShoe(),
+   // gets chances for hit depending on current position of fox
+       thisChance = playerTwo.chanceToScareOff();
+  // compares farmers shot to chance current chance to hit and logs result
    if (thisShot < thisChance) {
      console.log('HIT ' + thisShot);
-     fox.points--;
+     playerOne.updatePoints();
    } else {
      console.log('MISS ' + thisShot);
    }
  }
-
 };
+
+// TESTING: MOVE TO START GAME FUNC EVENTUALLY!
+var playerOne = new Player.fox();
+var playerTwo = new Player.farmer();
