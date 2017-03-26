@@ -10,8 +10,7 @@ $(function() {
     $fox: $('#fox'),
     $health: $('#health'),
     $turn: $('#turn'),
-    $eggs: $('#eggs'),
-    $bush: $('#bush')
+    $eggs: $('#eggs')
   };
 
   // object holding functions relevant to the game logic
@@ -27,12 +26,12 @@ $(function() {
       var coordinateFox = this.getCurrentPos(domElements.$fox);
       var coordinateBush = this.getCurrentPos(domElements.$bush);
       // if fox is within 100px +/- of hiding spot, fox is considered hidden
-      if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
-        console.log('FOX IS HIDDEN');
-        fox.isHidden = true;
-      } else {
-        fox.isHidden = false;
-      }
+      // if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
+      //   console.log('FOX IS HIDDEN');
+      //   fox.isHidden = true;
+      // } else {
+      //   fox.isHidden = false;
+      // }
     }
   };
 
@@ -54,6 +53,20 @@ $(function() {
     // updates status bar to reflect current turn #
     updateTurn: function() {
       domElements.$turn.append($('<span>').html('night ' + game.numOfTurn));
+    },
+    generateSafeZones: function() {
+      for (var i = 1; i <= 7; i++) {
+        $newBush = $('<div>').addClass('bush');
+        domElements.$gameBoard.append($newBush);
+      }
+      $bush = $('.bush');
+      console.log($bush);
+      var left = 0;
+      for (var i = 0; i < $bush.length; i++) {
+        left += 35;
+        $bush.eq(i).css('left', left + '%');
+      }
+
     }
   };
 
@@ -73,11 +86,11 @@ $(function() {
       domElements.$fox.css('left', fox.getPos() + '%');
 
       // currently just for TESTING: logs current position of fox and compares them
-      console.log('fox');
-      console.log(gameLogic.getCurrentPos(domElements.$fox));
-      console.log('bush');
-      console.log(gameLogic.getCurrentPos(domElements.$bush));
-      gameLogic.compareCoordinates();
+      // console.log('fox');
+      // console.log(gameLogic.getCurrentPos(domElements.$fox));
+      // console.log('bush');
+      // console.log(gameLogic.getCurrentPos(domElements.$bush));
+      // gameLogic.compareCoordinates();
     }
   };
 
@@ -88,6 +101,8 @@ $(function() {
   viewUpdates.updateHealth();
   viewUpdates.updateEggs();
   viewUpdates.updateTurn();
+  viewUpdates.generateSafeZones();
+
 
 // *** Goodbye jQuery ***
 });
@@ -121,7 +136,7 @@ var Player = {
     var self = this;
 
     // initial starting position on screen
-    var pos = 0;
+    var pos = 3;
 
     // public method returns current # of points
     self.getPos = function() {
@@ -129,7 +144,7 @@ var Player = {
     };
     // public method reduces # of points when called
     self.updatePos = function() {
-      pos += .4;
+      pos += .3;
     };
 
     // tracks if fox is hidden (true) or not (false)
@@ -203,11 +218,11 @@ var movementFunctionality = {
   // method updates pos for background and fox
   moveForward: function() {
     // background pos is increased by ten
-    this.pos += 1;
+    this.pos += .9;
     // fox's pos is increased by eleven
-    console.log(fox.getPos());
+    // console.log(fox.getPos());
     fox.updatePos();
-    console.log(fox.getPos());
+    // console.log(fox.getPos());
   }
 };
 
