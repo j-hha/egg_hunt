@@ -65,11 +65,11 @@ $(function() {
       // calls function that increases position
       movementFunctionality.moveForward();
       // updates position of background in css using value update from moveForward function
-      domElements.$gameBoard.css('right', pos + 'px');
+      domElements.$gameBoard.css('right', movementFunctionality.pos + 'px');
       // updates position of fox in css using value update from moveForward function
       domElements.$fox.css('left', fox.pos + 'px');
 
-      // currently just for testing: logs current position of fox and compares them
+      // currently just for TESTING: logs current position of fox and compares them
       console.log('fox');
       console.log(gameLogic.getCurrentPos(domElements.$fox));
       console.log('bush');
@@ -86,59 +86,74 @@ $(function() {
   viewUpdates.updateEggs();
   viewUpdates.updateTurn();
 
-
+// Goodbye jQuery
 });
 
-// global variables
-// initializes position for move functionality
-var pos = 0,
-    numOfTurn = 1;
+// Hello Vanilla JavaScript
 
 // player objects
-var farmer = {
+
+// the fox
+var fox = {
+  // initial # health points
   points: 10,
+  // initial starting position on screen
+  pos: 20,
+  // tracks if fox is hidden (true) or not (false)
+  isHidden: false,
+  // tracks if fox is in a danger zone (true) or not (false)
+  inDangerZone: false,
+}
+
+// the farmer
+var farmer = {
+  // initial # of eggs
+  points: 10,
+  // tracks if farmer can be awoken (true) or not (false)
   rousable: false,
-  // function returns random number that will determine if farmer has scared fox off
+  // method returns random number that represents a show throw
   throwShoe: function() {
     return Math.random();
   },
+  // method determines chances of scaring fox off
   chanceToScareOff: function() {
     if (fox.isHidden) {
-      //chance to scare off is zero;
+      //if fox is hidden, chance to scare off is zero
       return 0;
     } else if (fox.inDangerZone) {
-      //chance to scare off is 90%
+      //if fox is in a danger zone, chance to scare off is 90%
       return Math.random() * .9;
     }
-    //chance to scare off is 50%
+    //in all other cases, chance to scare off is 50%
     return Math.random() * .5;
   }
 }
 
-// player objects
-var fox = {
-  points: 10,
-  pos: 20,
-  isHidden: false,
-  inDangerZone: false,
-}
-
-// movement functions
+// object stores variables and methods necessary for fox's movement
 var movementFunctionality = {
-  // function increases global position variable by 10
+  // initializes position of background with 0
+  pos: 0,
+  // method updates pos for background and fox
   moveForward: function() {
-    pos += 10;
+    // background pos is increased by ten
+    this.pos += 10;
+    // fox's pos is increased by eleven
     fox.pos += 11;
   }
 };
 
-var checkStatus = function() {
-  var thisShot = farmer.throwShoe(),
-      thisChance = farmer.chanceToScareOff();
-  if (thisShot < thisChance) {
-    console.log('HIT ' + thisShot);
-    fox.points--;
-  } else {
-    console.log('MISS ' + thisShot);
-  }
-}
+// game object holds variables and methods essential to the game flow
+var game = {
+  numOfTurn: 1,
+  checkStatus: function() {
+   var thisShot = farmer.throwShoe(),
+       thisChance = farmer.chanceToScareOff();
+   if (thisShot < thisChance) {
+     console.log('HIT ' + thisShot);
+     fox.points--;
+   } else {
+     console.log('MISS ' + thisShot);
+   }
+ }
+
+};
