@@ -35,13 +35,13 @@ $(function() {
   var viewUpdates = {
     // updates status bar to reflect current health points
     updateHealth: function() {
-      for (var i = healthPoints; i>=1; i--) {
+      for (var i = fox.points; i>=1; i--) {
         domElements.$health.append($('<span>').html('&#x2764;'));
       }
     },
     // updates status bar to reflect current # of eggs in barn
     updateEggs: function() {
-      for (var i = numOfEggs; i>=1; i--) {
+      for (var i = farmer.points; i>=1; i--) {
         domElements.$eggs.append($('<span>').html('&#x2b2e;'));
       }
     },
@@ -64,7 +64,7 @@ $(function() {
       // updates position of background in css using value update from moveForward function
       domElements.$gameBoard.css('right', pos + 'px');
       // updates position of fox in css using value update from moveForward function
-      domElements.$fox.css('left', posFox + 'px');
+      domElements.$fox.css('left', fox.pos + 'px');
 
       // currently just for testing: logs current position of fox and compares them
       console.log('fox');
@@ -89,16 +89,42 @@ $(function() {
 // global variables
 // initializes position for move functionality
 var pos = 0,
-    posFox = 20,
-    healthPoints = 10,
-    numOfEggs = 10,
     numOfTurn = 1;
+
+// player objects
+var farmer = {
+  points: 10,
+  rousable: false,
+  throwShoe: function() {
+    // returns random number that will determine if farmer has scared fox off
+    return Math.round(Math.random());
+  }
+}
+
+// player objects
+var fox = {
+  points: 10,
+  pos: 20,
+  isHidden: false,
+  inDangerZone: false
+}
 
 // movement functions
 var movementFunctionality = {
   // function increases global position variable by 10
   moveForward: function() {
     pos += 10;
-    posFox += 11;
+    fox.pos += 11;
   }
 };
+
+var checkStatus = function() {
+  var thisShot = farmer.throwShoe();
+  if (fox.isHidden) {
+    //chance to scare off = 0;
+  } else if (fox.inDangerZone) {
+    //chance to scare off <= .9
+  } else {
+    //chance to scare off <= .5
+  }
+}
