@@ -58,8 +58,8 @@ table {
 }
 
 th {
-  width: calc(100% / 3);
   font-size: 2em;
+  width: 25%;
 }
 
 th span {

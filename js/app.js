@@ -68,9 +68,9 @@ $(function() {
       // calls function that increases position
       movementFunctionality.moveForward();
       // updates position of background in css using value update from moveForward function
-      domElements.$gameBoard.css('right', movementFunctionality.pos + 'px');
+      domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
       // updates position of fox in css using value update from moveForward function
-      domElements.$fox.css('left', fox.getPos() + 'px');
+      domElements.$fox.css('left', fox.getPos() + '%');
 
       // currently just for TESTING: logs current position of fox and compares them
       console.log('fox');
@@ -121,7 +121,7 @@ var Player = {
     var self = this;
 
     // initial starting position on screen
-    var pos = 20;
+    var pos = 0;
 
     // public method returns current # of points
     self.getPos = function() {
@@ -129,7 +129,7 @@ var Player = {
     };
     // public method reduces # of points when called
     self.updatePos = function() {
-      pos += 11;
+      pos += .4;
     };
 
     // tracks if fox is hidden (true) or not (false)
@@ -148,36 +148,48 @@ var Player = {
         // private property stores info if farmer is played by human player or computer
         player = typeOfPlayer,
         // private property tracks if farmer can be awoken (true) or not (false)
-        rousable = false;
+        canBeWokenUp = true;
     self.throwShoe = function() {
-      // random number representing shoe throw accuracy
-      var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
-          chance;
-      // chances of scaring fox off
-      if (fox.isHidden) {
-        // if fox is hidden, chance to scare off is zero
-        chance = 0;
-      } else if (fox.inDangerZone) {
-        // if fox is in a danger zone, chance to scare off is 90%
-        chance = 9;
+      if (canBeWokenUp) {
+        // random number representing shoe throw accuracy
+        var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
+            chance;
+        // chances of scaring fox off
+        if (fox.isHidden) {
+          // if fox is hidden, chance to scare off is zero
+          chance = 0;
+        } else if (fox.inDangerZone) {
+          // if fox is in a danger zone, chance to scare off is 90%
+          chance = 9;
+        } else {
+          // in all other cases, chance to scare off is 50%
+          chance = 5;
+        }
+        // compares farmers shot to chance current chance to hit and logs result
+         if (accuracyOfThrow <= chance) {
+           console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
+           fox.updatePoints();
+         } else {
+           console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
+         }
       } else {
-        // in all other cases, chance to scare off is 50%
-        chance = 5;
+        console.log('Sorry! Farmer is fast asleep!');
       }
-      // compares farmers shot to chance current chance to hit and logs result
-       if (accuracyOfThrow <= chance) {
-         console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
-         fox.updatePoints();
-       } else {
-         console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
-       }
     };
 
-    self.arouseFarmer = function() {
+    self.wakeFarmerUp = function() {
       if (player === 'human') {
-        // if human player: farmer can be awakened on keydown ('A') and he will then throw shoe BUT this action can only be repeated every x sec
+        // if human player:
+        // farmer can be awakened every 10 sec (true)
+        // user has two seconds to hit key to throw shoe
+        // farmer goes back to sleep (false)
+        if (canBeWokenUp) {
+          self.throwShoe();
+          canBeWokenUp = false;
+          setTimeout(function() {canBeWokenUp=true;}, 10000);
+        }
       } else {
-        // player === computer: farmer should awake every 20 secs and throw show
+        // if player === computer: farmer awaken every 10 secs and throws show automatically
         var automatic = setInterval(self.throwShoe, 10000);
       }
     };
@@ -191,7 +203,7 @@ var movementFunctionality = {
   // method updates pos for background and fox
   moveForward: function() {
     // background pos is increased by ten
-    this.pos += 10;
+    this.pos += 1;
     // fox's pos is increased by eleven
     console.log(fox.getPos());
     fox.updatePos();
