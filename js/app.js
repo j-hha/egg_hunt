@@ -149,27 +149,36 @@ var Player = {
 
     // tracks if farmer can be awoken (true) or not (false)
     self.rousable = false;
-    // method returns random number that represents a show throw
     self.throwShoe = function() {
-      return Math.round(Math.random() * (10-1) + 1);
-    };
-    // method determines chances of scaring fox off
-    self.chanceToScareOff = function() {
+      // random number representing shoe throw accuracy
+      var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
+          chance;
+      // chances of scaring fox off
       if (fox.isHidden) {
         // if fox is hidden, chance to scare off is zero
-        return 0;
+        chance = 0;
       } else if (fox.inDangerZone) {
         // if fox is in a danger zone, chance to scare off is 90%
-        return 9;
+        chance = 9;
+      } else {
+        // in all other cases, chance to scare off is 50%
+        chance = 5;
       }
-      // in all other cases, chance to scare off is 50%
-      return 5;
+      // compares farmers shot to chance current chance to hit and logs result
+       if (accuracyOfThrow <= chance) {
+         console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
+         fox.updatePoints();
+       } else {
+         console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
+       }
     };
+    
     self.arouseFarmer = function() {
       if (player === 'human') {
         // if human player: farmer can be awakened on keydown ('A') and he will then throw shoe BUT this action can only be repeated every x sec
       } else {
-        // player === computer: farmer should awake every 20 secs and throw shoe
+        // player === computer: farmer should awake every 20 secs and throw show
+
       }
     };
   }
@@ -195,19 +204,6 @@ var game = {
   // current turn #
   numOfTurn: 1,
   // method checks if farmer has managed to scare fox off
-  checkStatus: function() {
-    // gets random Number representing farmers shot
-   var thisShot = farmer.throwShoe(),
-   // gets chances for hit depending on current position of fox
-       thisChance = farmer.chanceToScareOff();
-  // compares farmers shot to chance current chance to hit and logs result
-   if (thisShot <= thisChance) {
-     console.log('HIT ' + thisShot + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
-     fox.updatePoints();
-   } else {
-     console.log('MISS ' + thisShot + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
-   }
- }
 };
 
 // TESTING: MOVE TO START GAME FUNC EVENTUALLY!
