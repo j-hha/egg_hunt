@@ -8,14 +8,26 @@ $(function() {
     $fox: $('#fox'),
     $health: $('#health'),
     $turn: $('#turn'),
-    $eggs: $('#eggs')
+    $eggs: $('#eggs'),
+    $bush: $('#bush')
   };
 
   // object holding functions relevant to the game logic
   var gameLogic = {
-          // function gets the current position of the element that is passed in as a parameter
+    // function gets the current position of the element that is passed in as a parameter
     getCurrentPos: function(element) {
+      // returns object with current coordinates for left and top of element
       return element.offset();
+    },
+    // function compares coordinates of fox and hiding spot
+    compareCoordinates: function() {
+      // objects with left and top coordinates of fox and bush elements stored in variables
+      var coordinateFox = this.getCurrentPos(domElements.$fox);
+      var coordinateBush = this.getCurrentPos(domElements.$bush);
+      // if fox is within 100px +/- of hiding spot, fox is considered hidden
+      if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
+        console.log('FOX IS HIDDEN');
+      }
     }
   };
 
@@ -53,8 +65,13 @@ $(function() {
       domElements.$gameBoard.css('right', pos + 'px');
       // updates position of fox in css using value update from moveForward function
       domElements.$fox.css('left', posFox + 'px');
-      // currently just for testing: logs current position of fox
+
+      // currently just for testing: logs current position of fox and compares them
+      console.log('fox');
       console.log(gameLogic.getCurrentPos(domElements.$fox));
+      console.log('bush');
+      console.log(gameLogic.getCurrentPos(domElements.$bush));
+      gameLogic.compareCoordinates();
     }
   };
 

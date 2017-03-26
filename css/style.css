@@ -73,10 +73,21 @@ th span {
 }
 
 #fox {
-  width: 8%;
+  width: 6%;
   position: absolute;
   left: 20px;
   bottom: -1em;
+}
+
+#bush {
+  width: 7%;
+  height: 6em;
+  border-top-left-radius: 5em;
+  border-top-right-radius: 5em;
+  background-color: #181e18;
+  position: absolute;
+  left: 50%;
+  bottom: 0em;
 }
 
 #grass {
