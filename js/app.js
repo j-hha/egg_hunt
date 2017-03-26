@@ -139,12 +139,13 @@ var Player = {
   },
 
   // the farmer
-  farmer: function(points) {
+  farmer: function(typeOfPlayer) {
     // inhertis from basicPlayer
     Player.basicPlayer.call(this);
 
     // sets var self equal to this
-    var self = this;
+    var self = this,
+        player = typeOfPlayer;
 
     // tracks if farmer can be awoken (true) or not (false)
     self.rousable = false;
@@ -163,7 +164,14 @@ var Player = {
       }
       // in all other cases, chance to scare off is 50%
       return 5;
-    }
+    };
+    self.arouseFarmer = function() {
+      if (player === 'human') {
+        // if human player: farmer can be awakened on keydown ('A') and he will then throw shoe BUT this action can only be repeated every x sec
+      } else {
+        // player === computer: farmer should awake every 20 secs and throw shoe
+      }
+    };
   }
 }
 
