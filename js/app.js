@@ -27,6 +27,9 @@ $(function() {
       // if fox is within 100px +/- of hiding spot, fox is considered hidden
       if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
         console.log('FOX IS HIDDEN');
+        fox.isHidden = true;
+      } else {
+        fox.isHidden = false;
       }
     }
   };
@@ -95,9 +98,20 @@ var pos = 0,
 var farmer = {
   points: 10,
   rousable: false,
+  // function returns random number that will determine if farmer has scared fox off
   throwShoe: function() {
-    // returns random number that will determine if farmer has scared fox off
-    return Math.round(Math.random());
+    return Math.random();
+  },
+  chanceToScareOff: function() {
+    if (fox.isHidden) {
+      //chance to scare off is zero;
+      return 0;
+    } else if (fox.inDangerZone) {
+      //chance to scare off is 90%
+      return Math.random() * .9;
+    }
+    //chance to scare off is 50%
+    return Math.random() * .5;
   }
 }
 
@@ -106,7 +120,7 @@ var fox = {
   points: 10,
   pos: 20,
   isHidden: false,
-  inDangerZone: false
+  inDangerZone: false,
 }
 
 // movement functions
@@ -119,12 +133,12 @@ var movementFunctionality = {
 };
 
 var checkStatus = function() {
-  var thisShot = farmer.throwShoe();
-  if (fox.isHidden) {
-    //chance to scare off = 0;
-  } else if (fox.inDangerZone) {
-    //chance to scare off <= .9
+  var thisShot = farmer.throwShoe(),
+      thisChance = farmer.chanceToScareOff();
+  if (thisShot < thisChance) {
+    console.log('HIT ' + thisShot);
+    fox.points--;
   } else {
-    //chance to scare off <= .5
+    console.log('MISS ' + thisShot);
   }
 }
