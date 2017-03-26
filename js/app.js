@@ -145,10 +145,10 @@ var Player = {
 
     // sets var self equal to this
     var self = this,
-        player = typeOfPlayer;
-
-    // tracks if farmer can be awoken (true) or not (false)
-    self.rousable = false;
+        // private property stores info if farmer is played by human player or computer
+        player = typeOfPlayer,
+        // private property tracks if farmer can be awoken (true) or not (false)
+        rousable = false;
     self.throwShoe = function() {
       // random number representing shoe throw accuracy
       var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
@@ -172,13 +172,13 @@ var Player = {
          console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
        }
     };
-    
+
     self.arouseFarmer = function() {
       if (player === 'human') {
         // if human player: farmer can be awakened on keydown ('A') and he will then throw shoe BUT this action can only be repeated every x sec
       } else {
         // player === computer: farmer should awake every 20 secs and throw show
-
+        var automatic = setInterval(self.throwShoe, 10000);
       }
     };
   }
