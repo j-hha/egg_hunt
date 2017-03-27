@@ -72,6 +72,19 @@ th span {
   position: relative;
 }
 
+#moon {
+  width: 6em;
+  height: 6em;
+  border-radius: 100%;
+  top: 3em;
+  left: 30%;
+  background-color: #f2f2f2;
+  box-shadow: 0 0 6em #fff;
+  position: absolute;
+  top: 2em;
+  left: 3%;
+}
+
 #dog-house {
   background-image: url("../img/dog_house.svg");
   background-size: contain;

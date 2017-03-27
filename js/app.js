@@ -10,7 +10,9 @@ $(function() {
     $fox: $('#fox'),
     $health: $('#health'),
     $turn: $('#turn'),
-    $eggs: $('#eggs')
+    $eggs: $('#eggs'),
+    $moon: $('#moon'),
+    $start: $('#start')
   };
 
   // object holding functions relevant to the game logic
@@ -48,17 +50,26 @@ $(function() {
 
   // object holding functions that update elements in the view
   var viewUpdates = {
-    // updates status bar to reflect current health points
-    updateHealth: function() {
-      var currentHealth = fox.getPoints();
-      for (var i = currentHealth; i>=1; i--) {
-        domElements.$health.append($('<span>').html('&#x2764;'));
+    // updates status bar to reflect current health points, takes player object as parameter
+    updateStatusBar: function(player) {
+      // calls getPoints method on player object (fox or farmer) and saves result to currentPoints variable
+      var currentPoints = player.getPoints(),
+      // declare element and symbol variable
+          element,
+          symbol;
+      // conditional sets element and symbol variable to the correct values for either fox ($health and heart) and farmer ($eggs and ellipsis)
+      if (player === fox) {
+        element = domElements.$health;
+        symbol = '&#x2764;'
+      } else if (player === farmer) {
+        element = domElements.$eggs;
+        symbol = '&#x2b2e;'
       }
-    },
-    // updates status bar to reflect current # of eggs in barn
-    updateEggs: function() {
-      for (var i = farmer.getPoints(); i>=1; i--) {
-        domElements.$eggs.append($('<span>').html('&#x2b2e;'));
+      // clears html (necessary since append will not overwrite previous content --> the following would just add more symbols each time it is called, if not cleared)
+      element.html('');
+      // loop appends one symbol each time it runs to the respective table cell (element), currentPoints  = number of iterations
+      for (var i = currentPoints; i>=1; i--) {
+        element.append($('<span>').html(symbol));
       }
     },
     // updates status bar to reflect current turn #
@@ -100,20 +111,34 @@ $(function() {
       domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
       // updates position of fox in css using value update from moveForward function
       domElements.$fox.css('left', fox.getPos() + '%');
+      domElements.$moon.css('left', fox.getPos() + '%');
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
+    },
+    startGame: function() {
+      ///GET PLAYER INFO
+        // if (player === 'human') {
+        //   // CREATE SPECIAL EVENT HANDLER
+        // } else {
+          farmer.wakeUp();
+        // }
     }
   };
 
   //eventListeners
   $(document).keydown(eventHandlers.moveFox);
+  domElements.$start.on('click', eventHandlers.startGame);
+
 
   // eventually move into start game func
-  viewUpdates.updateHealth();
-  viewUpdates.updateEggs();
+  viewUpdates.updateStatusBar(fox);
+  viewUpdates.updateStatusBar(farmer);
   viewUpdates.updateTurn();
   viewUpdates.generateSafeZones();
 
+  // stores jquery functions that need to be available in vanilla JS part too
+  window.app = {};
+  window.app.updateStatusBar = viewUpdates.updateStatusBar;
 
 // *** Goodbye jQuery ***
 });
@@ -195,15 +220,14 @@ var Player = {
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
            fox.updatePoints();
+           window.app.updateStatusBar(fox);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
          }
-      } else {
-        console.log('Sorry! Farmer is fast asleep!');
       }
     };
 
-    self.wakeFarmerUp = function() {
+    self.wakeUp = function() {
       if (player === 'human') {
         // if human player:
         // farmer can be awakened every 10 sec (true)
@@ -212,7 +236,9 @@ var Player = {
         if (canBeWokenUp) {
           self.throwShoe();
           canBeWokenUp = false;
-          setTimeout(function() {canBeWokenUp=true;}, 10000);
+          setTimeout(function() {canBeWokenUp = true;}, 10000);
+        } else {
+          console.log('Sorry! Farmer is fast asleep!');
         }
       } else {
         // if player === computer: farmer awaken every 10 secs and throws show automatically
@@ -241,7 +267,6 @@ var movementFunctionality = {
 var game = {
   // current turn #
   numOfTurn: 1,
-  // method checks if farmer has managed to scare fox off
 };
 
 // TESTING: MOVE TO START GAME FUNC EVENTUALLY!
