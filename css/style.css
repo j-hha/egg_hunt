@@ -72,6 +72,20 @@ th span {
   position: relative;
 }
 
+#dog-house {
+  background-image: url("../img/dog_house.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 12em;
+  width: 4%;
+  position: absolute;
+  left: 50%;
+  bottom: -.6em;
+  display: flex;
+  justify-content: center;
+}
+
 #fox {
   height: 9em;
   width: 10%;

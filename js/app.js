@@ -100,7 +100,6 @@ $(function() {
       domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
       // updates position of fox in css using value update from moveForward function
       domElements.$fox.css('left', fox.getPos() + '%');
-
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
     }
