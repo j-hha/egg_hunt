@@ -103,9 +103,15 @@ $(function() {
       domElements.$shoe.css('left', '150%');
       domElements.$shoe.show();
       if (success === 'success') {
-        domElements.$shoe.animate({left: fox.getPos() + '%'}, 'slow');
+        domElements.$shoe.animate(
+          {left: fox.getPos() + '%',
+          top: 14 + 'em'},
+          {duration: 2000});
       } else {
-        domElements.$shoe.animate({left: (fox.getPos()+15) + '%'}, 'slow');
+        domElements.$shoe.animate(
+          {left: fox.getPos() + '%',
+          top: 0},
+          {duration: 2000});
       }
       domElements.$shoe.hide('slow');
     },
@@ -259,7 +265,7 @@ var Player = {
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow('success');
-           setTimeout(window.app.handleRoundUpdates, 1000);
+           setTimeout(window.app.handleRoundUpdates, 3000);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow();

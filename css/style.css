@@ -100,7 +100,7 @@ th span {
 }
 
 #shoe {
-  top: 13em;
+  bottom: 15em;
   left: 150%;
   width: 3%;
   height: 7em;
@@ -110,6 +110,14 @@ th span {
   background-position: center;
   background-repeat: no-repeat;
   display: none;
+  animation-name: spin;
+  animation-duration: 4s;
+  animation-delay: ease-out;
+}
+
+@keyframes spin {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(3600deg);}
 }
 
 #fox {
