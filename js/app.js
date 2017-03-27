@@ -12,7 +12,8 @@ $(function() {
     $turn: $('#turn'),
     $eggs: $('#eggs'),
     $moon: $('#moon'),
-    $start: $('#start')
+    $start: $('#start'),
+    $shoe: $('#shoe')
   };
 
   // object holding functions relevant to the game logic
@@ -98,6 +99,16 @@ $(function() {
         $bush.eq(i).css('left', left + '%');
       }
     },
+    animateShoeThrow: function(success) {
+      domElements.$shoe.css('left', '150%');
+      domElements.$shoe.show();
+      if (success === 'success') {
+        domElements.$shoe.animate({left: fox.getPos() + '%'}, 'slow');
+      } else {
+        domElements.$shoe.animate({left: (fox.getPos()+15) + '%'}, 'slow');
+      }
+      domElements.$shoe.hide('slow');
+    },
     foxAnimation: function() {
       // updates position of background in css using value update from moveForward function
       domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
@@ -137,6 +148,7 @@ $(function() {
 
 
     //START GAME FUNCTION!
+    //CAREFUL! CURRENTLY FARMER FUNCTION EXECUTES TWICE IF START IS DOUBLE-CLICKED! FIX!!!
     startGame: function() {
       ///GET PLAYER INFO
         // if (player === 'human') {
@@ -161,6 +173,7 @@ $(function() {
   // stores jquery functions that need to be available in vanilla JS part too
   window.app = {};
   window.app.handleRoundUpdates = gameLogic.handleRoundUpdates;
+  window.app.animateShoeThrow = viewUpdates.animateShoeThrow;
 
 // *** Goodbye jQuery ***
 });
@@ -245,9 +258,11 @@ var Player = {
         // compares farmers shot to chance current chance to hit and logs result
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
-           window.app.handleRoundUpdates();
+           window.app.animateShoeThrow('success');
+           setTimeout(window.app.handleRoundUpdates, 1000);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
+           window.app.animateShoeThrow();
          }
       }
     };

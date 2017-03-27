@@ -63,7 +63,7 @@ th {
 }
 
 th span {
-  padding: .1em;
+  padding: 0 1%;
 }
 
 #game-board {
@@ -97,6 +97,19 @@ th span {
   bottom: -.6em;
   display: flex;
   justify-content: center;
+}
+
+#shoe {
+  top: 13em;
+  left: 150%;
+  width: 3%;
+  height: 7em;
+  position: absolute;
+  background-image: url("../img/shoe.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: none;
 }
 
 #fox {
