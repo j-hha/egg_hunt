@@ -20,18 +20,29 @@ $(function() {
       // returns object with current coordinates for left and top of element
       return element.offset();
     },
+    currentIndexOfBush: 0,
     // function compares coordinates of fox and hiding spot
     compareCoordinates: function() {
       // objects with left and top coordinates of fox and bush elements stored in variables
-      var coordinateFox = this.getCurrentPos(domElements.$fox);
-      var coordinateBush = this.getCurrentPos(domElements.$bush);
+      var $nearestBush = $('.bush').eq(this.currentIndexOfBush),
+          coordinateFox = this.getCurrentPos(domElements.$fox),
+          coordinateBush = this.getCurrentPos($nearestBush);
+          // console.log(coordinateBush);
+          // console.log(coordinateFox);
+
+      if(coordinateFox.left > coordinateBush.left + 5) {
+        this.currentIndexOfBush++
+        console.log(this.currentIndexOfBush);
+      }
+
       // if fox is within 100px +/- of hiding spot, fox is considered hidden
-      // if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
-      //   console.log('FOX IS HIDDEN');
-      //   fox.isHidden = true;
-      // } else {
-      //   fox.isHidden = false;
-      // }
+      if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
+        console.log('FOX IS HIDDEN');
+        fox.isHidden = true;
+      } else {
+        fox.isHidden = false;
+      }
+      viewUpdates.camouflageFox();
     }
   };
 
@@ -60,13 +71,18 @@ $(function() {
         domElements.$gameBoard.append($newBush);
       }
       $bush = $('.bush');
-      console.log($bush);
       var left = 0;
       for (var i = 0; i < $bush.length; i++) {
-        left += 35;
+        left += 33;
         $bush.eq(i).css('left', left + '%');
       }
-
+    },
+    camouflageFox: function() {
+      if (fox.isHidden) {
+        domElements.$fox.css('opacity', '.3');
+      } else {
+        domElements.$fox.css('opacity', '1');
+      }
     }
   };
 
@@ -86,11 +102,7 @@ $(function() {
       domElements.$fox.css('left', fox.getPos() + '%');
 
       // currently just for TESTING: logs current position of fox and compares them
-      // console.log('fox');
-      // console.log(gameLogic.getCurrentPos(domElements.$fox));
-      // console.log('bush');
-      // console.log(gameLogic.getCurrentPos(domElements.$bush));
-      // gameLogic.compareCoordinates();
+      gameLogic.compareCoordinates();
     }
   };
 
