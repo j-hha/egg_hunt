@@ -45,6 +45,14 @@ $(function() {
         fox.isHidden = false;
       }
       viewUpdates.camouflageFox();
+    },
+    handleRoundUpdates: function() {
+      fox.updatePoints();
+      game.updateNumOfTurn();
+      viewUpdates.updateStatusBar(fox);
+      viewUpdates.updateTurn(fox);
+      viewUpdates.resetViewForNewTurn();
+      viewUpdates.foxAnimation();
     }
   };
 
@@ -90,12 +98,24 @@ $(function() {
         $bush.eq(i).css('left', left + '%');
       }
     },
+    foxAnimation: function() {
+      // updates position of background in css using value update from moveForward function
+      domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
+      // updates position of fox in css using value update from moveForward function
+      domElements.$fox.css('left', fox.getPos() + '%');
+      domElements.$moon.css('left', fox.getPos() + '%');
+    },
     camouflageFox: function() {
       if (fox.isHidden) {
         domElements.$fox.css('opacity', '.3');
       } else {
         domElements.$fox.css('opacity', '1');
       }
+    },
+    resetViewForNewTurn: function() {
+      fox.resetPos();
+      movementFunctionality.pos = 0;
+      viewUpdates.foxAnimation();
     }
   };
 
@@ -109,14 +129,14 @@ $(function() {
       }
       // calls function that increases position
       movementFunctionality.moveForward();
-      // updates position of background in css using value update from moveForward function
-      domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
-      // updates position of fox in css using value update from moveForward function
-      domElements.$fox.css('left', fox.getPos() + '%');
-      domElements.$moon.css('left', fox.getPos() + '%');
+      // calls function that updates view accordingly
+      viewUpdates.foxAnimation();
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
     },
+
+
+    //START GAME FUNCTION!
     startGame: function() {
       ///GET PLAYER INFO
         // if (player === 'human') {
@@ -140,8 +160,7 @@ $(function() {
 
   // stores jquery functions that need to be available in vanilla JS part too
   window.app = {};
-  window.app.updateStatusBar = viewUpdates.updateStatusBar;
-  window.app.updateTurn = viewUpdates.updateTurn;
+  window.app.handleRoundUpdates = gameLogic.handleRoundUpdates;
 
 // *** Goodbye jQuery ***
 });
@@ -225,13 +244,10 @@ var Player = {
         }
         // compares farmers shot to chance current chance to hit and logs result
          if (accuracyOfThrow <= chance) {
-           console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
-           fox.updatePoints();
-           window.app.updateStatusBar(fox);
-           game.updateNumOfTurn();
-           window.app.updateTurn(fox);
+           console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
+           window.app.handleRoundUpdates();
          } else {
-           console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
+           console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
          }
       }
     };
@@ -278,9 +294,6 @@ var game = {
   numOfTurn: 1,
   updateNumOfTurn: function() {
     this.numOfTurn++;
-    //INTO RESET GAME STATE FUNC!
-    // movementFunctionality.pos = 0;
-    // fox.resetPos();
   }
 };
 
