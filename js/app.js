@@ -74,6 +74,8 @@ $(function() {
     },
     // updates status bar to reflect current turn #
     updateTurn: function() {
+      domElements.$turn.html('');
+
       domElements.$turn.append($('<span>').html('night ' + game.numOfTurn));
     },
     generateSafeZones: function() {
@@ -139,6 +141,7 @@ $(function() {
   // stores jquery functions that need to be available in vanilla JS part too
   window.app = {};
   window.app.updateStatusBar = viewUpdates.updateStatusBar;
+  window.app.updateTurn = viewUpdates.updateTurn;
 
 // *** Goodbye jQuery ***
 });
@@ -177,6 +180,10 @@ var Player = {
     // public method returns current # of points
     self.getPos = function() {
       return pos;
+    };
+    // public method resets fox's position
+    self.resetPos = function() {
+      pos = 3;
     };
     // public method reduces # of points when called
     self.updatePos = function() {
@@ -221,6 +228,8 @@ var Player = {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
            fox.updatePoints();
            window.app.updateStatusBar(fox);
+           game.updateNumOfTurn();
+           window.app.updateTurn(fox);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' danger: ' + fox.inDangerZone);
          }
@@ -267,6 +276,12 @@ var movementFunctionality = {
 var game = {
   // current turn #
   numOfTurn: 1,
+  updateNumOfTurn: function() {
+    this.numOfTurn++;
+    //INTO RESET GAME STATE FUNC!
+    // movementFunctionality.pos = 0;
+    // fox.resetPos();
+  }
 };
 
 // TESTING: MOVE TO START GAME FUNC EVENTUALLY!
