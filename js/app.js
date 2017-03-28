@@ -94,7 +94,6 @@ $(function() {
     displayMessage: function(content) {
       domElements.$message.text(content);
       domElements.$message.css('left', fox.getPos() + 10 + '%');
-      domElements.$message.css('top', '7.5em');
       domElements.$gameBoard.append(domElements.$message);
     },
     removeMessage: function() {
@@ -104,6 +103,7 @@ $(function() {
       domElements.$shoe.css('left', fox.getPos() + 47 + '%');
       domElements.$shoe.show();
       if (success === 'success') {
+        $(document).off('keydown', eventHandlers.moveFox);
         viewUpdates.displayMessage('Oh oh! I better retreat!');
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
@@ -139,34 +139,56 @@ $(function() {
       fox.resetPos();
       movementFunctionality.pos = 0;
       viewUpdates.foxAnimation();
+      $(document).on('keydown', eventHandlers.moveFox);
+      farmer.wakeUp();
     },
     handleRoundUpdates: function(roundLoser) {
       roundLoser.updatePoints();
-      game.updateNumOfTurn();
       viewUpdates.updateStatusBar(roundLoser);
-      viewUpdates.updateTurn();
-      viewUpdates.resetViewForNewTurn();
-      viewUpdates.foxAnimation();
+      clearInterval(farmer.automatic);
+      var gameOver = game.checkStatus();
+      console.log(gameOver);
+      if (gameOver) {
+        foxPoints = fox.getPoints(),
+        farmerPoints = farmer.getPoints();
+        //DISPLAY WIN/LOSE MESSAGE
+        console.log('GAME OVER! ');
+        //remove event listeners
+        // display win/lose message
+        if (foxPoints > farmerPoints) {
+          console.log('FOX WON!');
+        } else if (farmerPoints > foxPoints) {
+          console.log('FARMER WON!');
+        } else {
+          console.log("TIE!");
+        }
+      } else {
+        game.updateNumOfTurn();
+        viewUpdates.updateTurn();
+        viewUpdates.resetViewForNewTurn();
+        viewUpdates.foxAnimation();
+      }
     },
     evaluateEggHunt:  function() {
       var whereIsHenHouse = gameLogic.getCurrentPos(domElements.$henHouse);
       var whereIsFox = gameLogic.getCurrentPos(domElements.$fox);
       if (whereIsFox.left >= whereIsHenHouse.left-200) {
+        $(document).off('keydown', eventHandlers.moveFox);
         viewUpdates.displayMessage('DINNER TIME!');
         setTimeout(viewUpdates.removeMessage, 2000);
         setTimeout(function(){viewUpdates.handleRoundUpdates(farmer);}, 2000);      }
     },
-    toggleArticleText: function() {
-      $(this).
-      $article.html('');
-      if($(this).text() === 'about') {
-//
-      } else if($(this).text() === 'instructions') {
-//
-      } else if($(this).text() === 'options') {
-        //
-      }
-    }
+//     toggleArticleText: function() {
+//       $(this).
+//       $article.html('');
+//       if($(this).text() === 'about') {
+// //
+//       } else if($(this).text() === 'instructions') {
+// //
+//       } else if($(this).text() === 'options') {
+//         //
+//       }
+//     }
   };
 
   // object stores event handlers
@@ -197,7 +219,7 @@ $(function() {
         // } else {
           farmer.wakeUp();
         // }
-        $(document).keydown(eventHandlers.moveFox);
+        $(document).on('keydown', eventHandlers.moveFox);
     }
   };
 
@@ -280,6 +302,9 @@ var Player = {
         player = typeOfPlayer,
         // private property tracks if farmer can be awoken (true) or not (false)
         canBeWokenUp = true;
+
+    self.automatic;
+
     self.throwShoe = function() {
       if (canBeWokenUp) {
         // random number representing shoe throw accuracy
@@ -323,7 +348,7 @@ var Player = {
         }
       } else {
         // if player === computer: farmer awaken every 10 secs and throws show automatically
-        var automatic = setInterval(self.throwShoe, 12000);
+        self.automatic = setInterval(self.throwShoe, 12000);
       }
     };
   }
@@ -350,6 +375,17 @@ var game = {
   numOfTurn: 1,
   updateNumOfTurn: function() {
     this.numOfTurn++;
+  },
+  checkStatus: function() {
+    console.log('being called!');
+    var foxPoints = fox.getPoints(),
+        farmerPoints = farmer.getPoints();
+        if(foxPoints === 0 || farmerPoints === 0) {
+          return true;
+        }
+        else {
+          return false;
+        }
   }
 };
 
