@@ -14,7 +14,8 @@ $(function() {
     $moon: $('#moon'),
     $start: $('#start'),
     $shoe: $('#shoe'),
-    $henHouse: $('#hen-house')
+    $henHouse: $('#hen-house'),
+    $message: $('<div>').attr('id', 'message')
   };
 
   // object holding functions relevant to the game logic
@@ -89,19 +90,32 @@ $(function() {
         $bush.eq(i).css('left', left + '%');
       }
     },
+    displayMessage: function(content) {
+      domElements.$message.text(content);
+      domElements.$message.css('left', fox.getPos() + 10 + '%');
+      domElements.$message.css('top', '7.5em');
+      domElements.$gameBoard.append(domElements.$message);
+    },
+    removeMessage: function() {
+      domElements.$message.remove();
+    },
     animateShoeThrow: function(success) {
       domElements.$shoe.css('left', fox.getPos() + 47 + '%');
       domElements.$shoe.show();
       if (success === 'success') {
+        viewUpdates.displayMessage('Oh oh! I better retreat!');
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
           top: 14 + 'em'},
           {duration: 1500});
+          setTimeout(viewUpdates.removeMessage, 2000);
       } else {
+        viewUpdates.displayMessage('Ha! Not even close!');
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
           top: 0},
           {duration: 2000});
+          setTimeout(viewUpdates.removeMessage, 2000);
       }
       domElements.$shoe.hide('slow');
     },
@@ -133,14 +147,13 @@ $(function() {
       viewUpdates.resetViewForNewTurn();
       viewUpdates.foxAnimation();
     },
-    displaySuccessMessage:  function() {
+    evaluateEggHunt:  function() {
       var whereIsHenHouse = gameLogic.getCurrentPos(domElements.$henHouse);
       var whereIsFox = gameLogic.getCurrentPos(domElements.$fox);
-      // BUG FIND!!!
-      if (whereIsFox.left >= whereIsHenHouse.left-50) {
-        console.log('DINNER TIME!');
-        this.handleRoundUpdates(farmer);
-      }
+      if (whereIsFox.left >= whereIsHenHouse.left-200) {
+        viewUpdates.displayMessage('DINNER TIME!');
+        setTimeout(viewUpdates.removeMessage, 2000);
+        setTimeout(function(){viewUpdates.handleRoundUpdates(farmer);}, 2000);      }
     }
   };
 
@@ -159,7 +172,7 @@ $(function() {
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
       viewUpdates.camouflageFox();
-      viewUpdates.displaySuccessMessage();
+      viewUpdates.evaluateEggHunt();
     },
 
 
@@ -172,11 +185,11 @@ $(function() {
         // } else {
           farmer.wakeUp();
         // }
+        $(document).keydown(eventHandlers.moveFox);
     }
   };
 
   //eventListeners
-  $(document).keydown(eventHandlers.moveFox);
   domElements.$start.on('click', eventHandlers.startGame);
 
 
@@ -199,7 +212,7 @@ $(function() {
 var Player = {
   basicPlayer: function() {
     // private property stores initial # health points or eggs, is inherited by fox and farmer
-    var points = 10,
+    var points = 5,
     // sets var self equal to this
         self = this;
 
@@ -292,13 +305,13 @@ var Player = {
         if (canBeWokenUp) {
           self.throwShoe();
           canBeWokenUp = false;
-          setTimeout(function() {canBeWokenUp = true;}, 10000);
+          setTimeout(function() {canBeWokenUp = true;}, 12000);
         } else {
           console.log('Sorry! Farmer is fast asleep!');
         }
       } else {
         // if player === computer: farmer awaken every 10 secs and throws show automatically
-        var automatic = setInterval(self.throwShoe, 10000);
+        var automatic = setInterval(self.throwShoe, 12000);
       }
     };
   }
