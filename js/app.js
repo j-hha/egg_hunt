@@ -15,6 +15,7 @@ $(function() {
     $start: $('#start'),
     $shoe: $('#shoe'),
     $henHouse: $('#hen-house'),
+    $article: $('article'),
     $message: $('<div>').attr('id', 'message')
   };
 
@@ -154,6 +155,17 @@ $(function() {
         viewUpdates.displayMessage('DINNER TIME!');
         setTimeout(viewUpdates.removeMessage, 2000);
         setTimeout(function(){viewUpdates.handleRoundUpdates(farmer);}, 2000);      }
+    },
+    toggleArticleText: function() {
+      $(this).
+      $article.html('');
+      if($(this).text() === 'about') {
+//
+      } else if($(this).text() === 'instructions') {
+//
+      } else if($(this).text() === 'options') {
+        //
+      }
     }
   };
 
