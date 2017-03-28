@@ -111,7 +111,7 @@ th span {
 
 @keyframes spin {
   from {transform: rotate(0deg);}
-  to {transform: rotate(3600deg);}
+  to {transform: rotate(2520deg);}
 }
 
 #fox {
