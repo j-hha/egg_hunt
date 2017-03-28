@@ -16,6 +16,7 @@ $(function() {
     $shoe: $('#shoe'),
     $henHouse: $('#hen-house'),
     $article: $('article'),
+    $main: $('main'),
     $message: $('<div>').attr('id', 'message'),
     $gameEnd: $('<div>').attr('id', 'gameEnd'),
   };
@@ -144,14 +145,16 @@ $(function() {
       farmer.wakeUp();
     },
     displayGameEndMessage: function(roundWinner) {
+      domElements.$main.append(domElements.$gameEnd);
       if (roundWinner === 'fox') {
+        console.log('I AM PRINTING!');
         domElements.$gameEnd.text('Wooohooo! Fiona managed to get all the eggs. The little fox won this time!');
       } else if (roundWinner === 'farmer') {
+        console.log('I AM PRINTING, TOO!');
         domElements.$gameEnd.text('Farmer Firmus has succeeded! Fiona will look for dinner elsewhere.');
       } else {
         domElements.$gameEnd.text('Fiona managed to eat all the eggs, but is too scared to come back for more? How did that happen?!');
       }
-      domElements.$gameBoard.append(domElements.$gameEnd);
     },
     handleRoundUpdates: function(roundLoser) {
       roundLoser.updatePoints();
@@ -163,8 +166,6 @@ $(function() {
         foxPoints = fox.getPoints(),
         farmerPoints = farmer.getPoints();
         console.log('GAME OVER! ');
-        //remove event listeners
-        // display win/lose message
         if (foxPoints > farmerPoints) {
           viewUpdates.displayGameEndMessage('fox');
           console.log('FOX WON!');
@@ -258,7 +259,7 @@ $(function() {
 var Player = {
   basicPlayer: function() {
     // private property stores initial # health points or eggs, is inherited by fox and farmer
-    var points = 5,
+    var points = 1,
     // sets var self equal to this
         self = this;
 
@@ -337,7 +338,7 @@ var Player = {
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow('success');
-           setTimeout(function(){window.app.handleRoundUpdates(fox)}, 3000);
+           setTimeout(function(){window.app.handleRoundUpdates(fox)}, 2000);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow();
