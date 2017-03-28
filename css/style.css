@@ -84,7 +84,7 @@ th span {
 #hen-house {
   width: 8%;
   position: absolute;
-  left: 20%;
+  left: 200%;
   bottom: -.6em;
   display: flex;
   justify-content: center;
@@ -101,7 +101,7 @@ th span {
 
 #shoe {
   bottom: 15em;
-  left: 300%;
+  left: 200%;
   width: 3%;
   height: 7em;
   position: absolute;

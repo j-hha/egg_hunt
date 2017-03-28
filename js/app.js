@@ -13,7 +13,8 @@ $(function() {
     $eggs: $('#eggs'),
     $moon: $('#moon'),
     $start: $('#start'),
-    $shoe: $('#shoe')
+    $shoe: $('#shoe'),
+    $henHouse: $('#hen-house')
   };
 
   // object holding functions relevant to the game logic
@@ -31,7 +32,8 @@ $(function() {
           coordinateFox = this.getCurrentPos(domElements.$fox),
           coordinateBush = this.getCurrentPos($nearestBush);
 
-      if(coordinateFox.left > coordinateBush.left + 5) {
+      if(coordinateFox.left > coordinateBush.left + 5
+        && this.currentIndexOfBush < 5) {
         this.currentIndexOfBush++
       }
 
@@ -48,17 +50,17 @@ $(function() {
   // object holding functions that update elements in the view
   var viewUpdates = {
     // updates status bar to reflect current health points, takes player object as parameter
-    updateStatusBar: function(player) {
+    updateStatusBar: function(loser) {
       // calls getPoints method on player object (fox or farmer) and saves result to currentPoints variable
-      var currentPoints = player.getPoints(),
+      var currentPoints = loser.getPoints(),
       // declare element and symbol variable
           element,
           symbol;
       // conditional sets element and symbol variable to the correct values for either fox ($health and heart) and farmer ($eggs and ellipsis)
-      if (player === fox) {
+      if (loser === fox) {
         element = domElements.$health;
         symbol = '&#x2764;'
-      } else if (player === farmer) {
+      } else if (loser === farmer) {
         element = domElements.$eggs;
         symbol = '&#x2b2e;'
       }
@@ -76,7 +78,7 @@ $(function() {
       domElements.$turn.append($('<span>').html('night ' + game.numOfTurn));
     },
     generateSafeZones: function() {
-      for (var i = 1; i <= 7; i++) {
+      for (var i = 1; i <= 5; i++) {
         $newBush = $('<div>').addClass('bush');
         domElements.$gameBoard.append($newBush);
       }
@@ -123,13 +125,21 @@ $(function() {
       movementFunctionality.pos = 0;
       viewUpdates.foxAnimation();
     },
-    handleRoundUpdates: function() {
-      fox.updatePoints();
+    handleRoundUpdates: function(roundLoser) {
+      roundLoser.updatePoints();
       game.updateNumOfTurn();
-      viewUpdates.updateStatusBar(fox);
-      viewUpdates.updateTurn(fox);
+      viewUpdates.updateStatusBar(roundLoser);
+      viewUpdates.updateTurn();
       viewUpdates.resetViewForNewTurn();
       viewUpdates.foxAnimation();
+    },
+    displaySuccessMessage:  function() {
+      var whereIsHenHouse = gameLogic.getCurrentPos(domElements.$henHouse);
+      // BUG FIND!!!
+      if (fox.getPos() >= whereIsHenHouse.left-50) {
+        console.log('DINNER TIME!');
+        this.handleRoundUpdates(farmer);
+      }
     }
   };
 
@@ -148,6 +158,7 @@ $(function() {
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
       viewUpdates.camouflageFox();
+      viewUpdates.displaySuccessMessage();
     },
 
 
@@ -263,7 +274,7 @@ var Player = {
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow('success');
-           setTimeout(window.app.handleRoundUpdates, 3000);
+           setTimeout(function(){window.app.handleRoundUpdates(fox)}, 3000);
          } else {
            console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
            window.app.animateShoeThrow();
