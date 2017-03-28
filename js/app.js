@@ -33,7 +33,7 @@ $(function() {
           coordinateBush = this.getCurrentPos($nearestBush);
 
       if(coordinateFox.left > coordinateBush.left + 5
-        && this.currentIndexOfBush < 5) {
+        && this.currentIndexOfBush < 4) {
         this.currentIndexOfBush++
       }
 
@@ -90,13 +90,13 @@ $(function() {
       }
     },
     animateShoeThrow: function(success) {
-      domElements.$shoe.css('left', '150%');
+      domElements.$shoe.css('left', fox.getPos() + 47 + '%');
       domElements.$shoe.show();
       if (success === 'success') {
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
           top: 14 + 'em'},
-          {duration: 2000});
+          {duration: 1500});
       } else {
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
@@ -135,8 +135,9 @@ $(function() {
     },
     displaySuccessMessage:  function() {
       var whereIsHenHouse = gameLogic.getCurrentPos(domElements.$henHouse);
+      var whereIsFox = gameLogic.getCurrentPos(domElements.$fox);
       // BUG FIND!!!
-      if (fox.getPos() >= whereIsHenHouse.left-50) {
+      if (whereIsFox.left >= whereIsHenHouse.left-50) {
         console.log('DINNER TIME!');
         this.handleRoundUpdates(farmer);
       }
