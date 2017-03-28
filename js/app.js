@@ -30,12 +30,9 @@ $(function() {
       var $nearestBush = $('.bush').eq(this.currentIndexOfBush),
           coordinateFox = this.getCurrentPos(domElements.$fox),
           coordinateBush = this.getCurrentPos($nearestBush);
-          // console.log(coordinateBush);
-          // console.log(coordinateFox);
 
       if(coordinateFox.left > coordinateBush.left + 5) {
         this.currentIndexOfBush++
-        console.log(this.currentIndexOfBush);
       }
 
       // if fox is within 100px +/- of hiding spot, fox is considered hidden
@@ -45,15 +42,6 @@ $(function() {
       } else {
         fox.isHidden = false;
       }
-      viewUpdates.camouflageFox();
-    },
-    handleRoundUpdates: function() {
-      fox.updatePoints();
-      game.updateNumOfTurn();
-      viewUpdates.updateStatusBar(fox);
-      viewUpdates.updateTurn(fox);
-      viewUpdates.resetViewForNewTurn();
-      viewUpdates.foxAnimation();
     }
   };
 
@@ -130,8 +118,17 @@ $(function() {
       }
     },
     resetViewForNewTurn: function() {
+      gameLogic.currentIndexOfBush = 0;
       fox.resetPos();
       movementFunctionality.pos = 0;
+      viewUpdates.foxAnimation();
+    },
+    handleRoundUpdates: function() {
+      fox.updatePoints();
+      game.updateNumOfTurn();
+      viewUpdates.updateStatusBar(fox);
+      viewUpdates.updateTurn(fox);
+      viewUpdates.resetViewForNewTurn();
       viewUpdates.foxAnimation();
     }
   };
@@ -150,6 +147,7 @@ $(function() {
       viewUpdates.foxAnimation();
       // currently just for TESTING: logs current position of fox and compares them
       gameLogic.compareCoordinates();
+      viewUpdates.camouflageFox();
     },
 
 
@@ -178,7 +176,7 @@ $(function() {
 
   // stores jquery functions that need to be available in vanilla JS part too
   window.app = {};
-  window.app.handleRoundUpdates = gameLogic.handleRoundUpdates;
+  window.app.handleRoundUpdates = viewUpdates.handleRoundUpdates;
   window.app.animateShoeThrow = viewUpdates.animateShoeThrow;
 
 // *** Goodbye jQuery ***
