@@ -16,7 +16,8 @@ $(function() {
     $shoe: $('#shoe'),
     $henHouse: $('#hen-house'),
     $article: $('article'),
-    $message: $('<div>').attr('id', 'message')
+    $message: $('<div>').attr('id', 'message'),
+    $gameEnd: $('<div>').attr('id', 'gameEnd'),
   };
 
   // object holding functions relevant to the game logic
@@ -142,6 +143,16 @@ $(function() {
       $(document).on('keydown', eventHandlers.moveFox);
       farmer.wakeUp();
     },
+    displayGameEndMessage: function(roundWinner) {
+      if (roundWinner === 'fox') {
+        domElements.$gameEnd.text('Wooohooo! Fiona managed to get all the eggs. The little fox won this time!');
+      } else if (roundWinner === 'farmer') {
+        domElements.$gameEnd.text('Farmer Firmus has succeeded! Fiona will look for dinner elsewhere.');
+      } else {
+        domElements.$gameEnd.text('Fiona managed to eat all the eggs, but is too scared to come back for more? How did that happen?!');
+      }
+      domElements.$gameBoard.append(domElements.$gameEnd);
+    },
     handleRoundUpdates: function(roundLoser) {
       roundLoser.updatePoints();
       viewUpdates.updateStatusBar(roundLoser);
@@ -151,13 +162,14 @@ $(function() {
       if (gameOver) {
         foxPoints = fox.getPoints(),
         farmerPoints = farmer.getPoints();
-        //DISPLAY WIN/LOSE MESSAGE
         console.log('GAME OVER! ');
         //remove event listeners
         // display win/lose message
         if (foxPoints > farmerPoints) {
+          viewUpdates.displayGameEndMessage('fox');
           console.log('FOX WON!');
         } else if (farmerPoints > foxPoints) {
+          viewUpdates.displayGameEndMessage('farmer');
           console.log('FARMER WON!');
         } else {
           console.log("TIE!");
