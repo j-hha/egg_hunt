@@ -299,7 +299,7 @@ var movementFunctionality = {
   // method updates pos for background and fox
   moveForward: function() {
     // background pos is increased by ten
-    this.pos += .9;
+    this.pos += .6;
     // fox's pos is increased by eleven
     // console.log(fox.getPos());
     fox.updatePos();

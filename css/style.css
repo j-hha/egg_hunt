@@ -45,10 +45,6 @@ header h2 {
 
 main {
   background: rgba(50,50,50, 1);
-  /*background: -webkit-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
-  background: -o-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
-  background: -moz-linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));
-  background: linear-gradient(rgba(50,50,50, 1), rgba(50,50,50,.8));*/
   color: #f2f2f2;
   overflow: hidden;
 }
@@ -58,7 +54,7 @@ table {
 }
 
 th {
-  font-size: 2em;
+  font-size: 1.3em;
   width: 25%;
 }
 
@@ -67,7 +63,7 @@ th span {
 }
 
 #game-board {
-  width: 300%;
+  width: 200%;
   height: 28em;
   position: relative;
 }
@@ -85,16 +81,20 @@ th span {
   left: 3%;
 }
 
+#hen-house {
+  width: 8%;
+  position: absolute;
+  left: 20%;
+  bottom: -.6em;
+  display: flex;
+  justify-content: center;
+}
+
 #dog-house {
-  background-image: url("../img/dog_house.svg");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 12em;
   width: 4%;
   position: absolute;
   left: 50%;
-  bottom: -.6em;
+  bottom: 0em;
   display: flex;
   justify-content: center;
 }
@@ -121,15 +121,10 @@ th span {
 }
 
 #fox {
-  height: 9em;
   width: 10%;
   position: absolute;
   left: 3%;
-  bottom: -1.2em;
-  background-image: url("../img/fox_colored.svg");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  bottom: -.8em;
 }
 
 .bush {
@@ -151,7 +146,7 @@ th span {
   background-size: contain;
   background-repeat: repeat-x;
   position: absolute;
-  bottom: 0;
+  bottom: -.2em;
 }
 
 #options-bar nav ul {
