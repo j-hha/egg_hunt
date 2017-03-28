@@ -169,6 +169,26 @@ th span {
   font-weight: bold;
 }
 
+#start {
+  font-family: 'Amatica SC', cursive;
+  padding: .1em;
+  line-height: 1em;
+  border: 0;
+  background-color: rgb(255,39,52);
+  color: #f2f2f2;
+  box-shadow: .1em .1em .3em #808080;
+  font-size: 1em;
+  border-radius: .3em;
+}
+
+#start:hover {
+  background-color: rgb(255,134,39);
+}
+
+#start:active {
+  background-color: rgb(50,50,50);
+}
+
 article {
   font-family: 'Open Sans Condensed', sans-serif;
   padding: 3em 5%;
