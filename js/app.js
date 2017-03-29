@@ -59,9 +59,9 @@ $(function() {
       // compares current left position of fox to left position of nearest bush and if fox is within 100px +/- of hiding spot, fox is considered hidden (true)
       if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
         console.log('fox is HIDDEN');
-        fox.isHidden = true;
+        game.fox.isHidden = true;
       } else {
-        fox.isHidden = false;
+        game.fox.isHidden = false;
         console.log('fox is NOT hidden');
       }
     },
@@ -77,10 +77,10 @@ $(function() {
           element,
           symbol;
       // conditional sets element and symbol variable to the correct values for either fox ($health and heart) and farmer ($eggs and ellipsis)
-      if (loser === fox) {
+      if (loser === game.fox) {
         element = domElements.$health;
         symbol = '&#x2764;'
-      } else if (loser === farmer) {
+      } else if (loser === game.farmer) {
         element = domElements.$eggs;
         symbol = '&#x2b2e;'
       }
@@ -124,7 +124,7 @@ $(function() {
       // fills previously created message div with text from parameter
       domElements.$message.text(content);
       // places message div 10% left of fox's current position
-      domElements.$message.css('left', fox.getPos() + 10 + '%');
+      domElements.$message.css('left', game.fox.getPos() + 10 + '%');
       // appends message to game board
       domElements.$gameBoard.append(domElements.$message);
     },
@@ -135,7 +135,7 @@ $(function() {
     // animation of farmer throwing a boot, takes a parameter to determin if farmer has hit or missed fox
     animateShoeThrow: function(success) {
       // puts boot img 47% left of fox's current position
-      domElements.$shoe.css('left', fox.getPos() + 47 + '%');
+      domElements.$shoe.css('left', game.fox.getPos() + 47 + '%');
       // makes image visible
       domElements.$shoe.show();
       // conditional: determins what will happen if fox is hit
@@ -146,7 +146,7 @@ $(function() {
         viewUpdates.displayMessage('Oh oh! I better retreat!');
         // moves boot to foxes current position
         domElements.$shoe.animate(
-          {left: fox.getPos() + '%',
+          {left: game.fox.getPos() + '%',
           top: 14 + 'em'},
           {duration: 1500});
           // foxes message is removed after animation as ended
@@ -156,7 +156,7 @@ $(function() {
         viewUpdates.displayMessage('Ha! Not even close!');
         // moves boot to top of screen above fox
         domElements.$shoe.animate(
-          {left: fox.getPos() + '%',
+          {left: game.fox.getPos() + '%',
           top: 0},
           {duration: 1500});
           // foxes message is removed after animation as ended
@@ -170,13 +170,13 @@ $(function() {
       // updates position of background in css using value update from moveForward function
       domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
       // updates position of fox in css using value update from moveForward function
-      domElements.$fox.css('left', fox.getPos() + '%');
-      domElements.$moon.css('left', fox.getPos() + '%');
+      domElements.$fox.css('left', game.fox.getPos() + '%');
+      domElements.$moon.css('left', game.fox.getPos() + '%');
     },
-    // method adds visible effect indicating that fox.isHidden is set to true
+    // method adds visible effect indicating that fox is hidden is set to true
     camouflageFox: function() {
       //puts an opacity on fox img when fox is hiding in a bush
-      if (fox.isHidden) {
+      if (game.fox.isHidden) {
         domElements.$fox.css('opacity', '.3');
       } else /* removes opacity from fox img when fox has left hiding spot */ {
         domElements.$fox.css('opacity', '1');
@@ -187,13 +187,13 @@ $(function() {
       // nearest bush is set back to bush at index 0
       gameLogic.currentIndexOfBush = 0;
       // fox and background are set back to starting positions
-      fox.resetPos();
+      game.fox.resetPos();
       movementFunctionality.pos = 0;
       viewUpdates.foxAnimation();
       // event listener for moving fox is reattached
       $(document).on('keydown', eventHandlers.moveFox);
       // farmer is set back to active
-      farmer.wakeUp();
+      game.farmer.wakeUp();
     },
     // method displays final win/lose message when called, takes parameter winner to make sure correct message gets displayed
     displayGameEndMessage: function(winner) {
@@ -204,37 +204,52 @@ $(function() {
         domElements.$gameEnd.text('Wooohooo! Fiona managed to get all the eggs. The little fox won this time!');
       } else if (winner === 'farmer') {
         domElements.$gameEnd.text('Farmer Firmus has succeeded! Fiona will look for dinner elsewhere.');
-      } else { /* technically, the case tie shouldn't exist given my game logic ... */
+      } else { /* the case tie is very unlikely given my game logic ... */
         domElements.$gameEnd.text('A tie?? How did that happen?! You should not be seeing this!');
       }
     },
+    // handles updating and resetting for each new round, takes parameter of round loser
     handleRoundUpdates: function(roundLoser) {
+      // decreases round losers points
       roundLoser.updatePoints();
+      // updates status bar to reflect lost points
       viewUpdates.updateStatusBar(roundLoser);
-      clearInterval(farmer.automatic);
+      // stops farmer shoe throwing function
+      clearInterval(game.farmer.automatic);
+      // checks if game should continue (points > 0) or if one of the players has lost all points (=== 0)
+      // stores return value (boolean) from checkStatus method in game over variable
       var gameOver = game.checkStatus();
+      // if game over variable is set to true
       if (gameOver) {
-        foxPoints = fox.getPoints(),
-        farmerPoints = farmer.getPoints();
+        // points of fox and farmer are compared and the win or lose message method is called with the winner as a parameter
+        foxPoints = game.fox.getPoints(),
+        farmerPoints = game.farmer.getPoints();
         if (foxPoints > farmerPoints) {
           viewUpdates.displayGameEndMessage('fox');
         } else if (farmerPoints > foxPoints) {
           viewUpdates.displayGameEndMessage('farmer');
         }
-      } else {
+      } else /* if game over is false, points and round number are updated and the player gets to play a new round*/ {
         game.updateNumOfTurn();
         viewUpdates.updateTurn();
         viewUpdates.resetViewForNewTurn();
       }
     },
+    // method checks if fox has reached the hen house
     evaluateEggHunt:  function() {
+      // variables hold current position of hen house and fox
       var whereIsHenHouse = gameLogic.getCurrentPos(domElements.$henHouse);
       var whereIsFox = gameLogic.getCurrentPos(domElements.$fox);
+      // conditional compares positions and if fox is within 200px of henhouse ...
       if (whereIsFox.left >= whereIsHenHouse.left-200) {
+        // the event listener for moving fox is removed (--> signalling user, fox has won round)
         $(document).off('keydown', eventHandlers.moveFox);
+        // message is displayed signalling that fox has won round
         viewUpdates.displayMessage('DINNER TIME!');
+        // message is removed again after 2 seconds
         setTimeout(viewUpdates.removeMessage, 2000);
-        setTimeout(function(){viewUpdates.handleRoundUpdates(farmer);}, 2000);      }
+        // game is reset for new round after 2 seconds
+        setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);      }
     },
 //     toggleArticleText: function() {
 //       $(this).
@@ -257,36 +272,45 @@ $(function() {
       if (event.which == 38) {
         event.preventDefault();
       }
-      // calls function that increases position
+      // calls method that increases position
       movementFunctionality.moveForward();
-      // calls function that updates view accordingly
+      // calls method that updates view accordingly
       viewUpdates.foxAnimation();
-      // currently just for TESTING: logs current position of fox and compares them
+      // method compares coordinates to determin if fox is currently hidden
       gameLogic.compareCoordinates();
+      // method puts opacity on fox if isHidden is true and removes it if it is false
       viewUpdates.camouflageFox();
+      // method checks if fox has reached hen house
       viewUpdates.evaluateEggHunt();
     },
     //START GAME FUNCTION!
-    //CAREFUL! CURRENTLY FARMER FUNCTION EXECUTES TWICE IF START IS DOUBLE-CLICKED! FIX!!!
     startGame: function() {
+      game.fox = new Player.fox();
+      game.farmer = new Player.farmer();
+      // TESTING: MOVE TO START GAME FUNC EVENTUALLY!
       ///GET PLAYER INFO
         // if (player === 'human') {
         //   // CREATE SPECIAL EVENT HANDLER
         // } else {
-          farmer.wakeUp();
+          game.farmer.wakeUp();
         // }
         $(document).on('keydown', eventHandlers.moveFox);
         $(this).text('reset');
         $(this).off('click', eventHandlers.startGame);
         $(this).on('click', eventHandlers.resetAll);
+        // eventually move into start game func
+        viewUpdates.updateStatusBar(game.fox);
+        viewUpdates.updateStatusBar(game.farmer);
+        viewUpdates.updateTurn();
+        viewUpdates.generateSafeZones();
 
     },
     resetAll: function() {
-      clearInterval(farmer.automatic);
-      farmer.resetPoints();
-      fox.resetPoints();
-      viewUpdates.updateStatusBar(fox);
-      viewUpdates.updateStatusBar(farmer);
+      clearInterval(game.farmer.automatic);
+      game.farmer.resetPoints();
+      game.fox.resetPoints();
+      viewUpdates.updateStatusBar(game.fox);
+      viewUpdates.updateStatusBar(game.farmer);
       game.numOfTurn = 1;
       viewUpdates.updateTurn();
       viewUpdates.resetViewForNewTurn();
@@ -294,15 +318,11 @@ $(function() {
     }
   };
 
+
   //eventListeners
   domElements.$start.on('click', eventHandlers.startGame);
 
 
-  // eventually move into start game func
-  viewUpdates.updateStatusBar(fox);
-  viewUpdates.updateStatusBar(farmer);
-  viewUpdates.updateTurn();
-  viewUpdates.generateSafeZones();
 
   // stores jquery functions that need to be available in vanilla JS part too
   window.app = {};
@@ -386,10 +406,10 @@ var Player = {
         var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
             chance;
         // chances of scaring fox off
-        if (fox.isHidden) {
+        if (game.fox.isHidden) {
           // if fox is hidden, chance to scare off is zero
           chance = 0;
-        } else if (fox.inDangerZone) {
+        } else if (game.fox.inDangerZone) {
           // if fox is in a danger zone, chance to scare off is 90%
           chance = 9;
         } else {
@@ -398,11 +418,11 @@ var Player = {
         }
         // compares farmers shot to chance current chance to hit and logs result
          if (accuracyOfThrow <= chance) {
-           console.log('HIT ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
+           console.log('HIT ' + accuracyOfThrow + ' hidden: ' + game.fox.isHidden + ' , danger: ' + game.fox.inDangerZone);
            window.app.animateShoeThrow('success');
-           setTimeout(function(){window.app.handleRoundUpdates(fox)}, 2000);
+           setTimeout(function(){window.app.handleRoundUpdates(game.fox)}, 2000);
          } else {
-           console.log('MISS ' + accuracyOfThrow + ' hidden: ' + fox.isHidden + ' , danger: ' + fox.inDangerZone);
+           console.log('MISS ' + accuracyOfThrow + ' hidden: ' + game.fox.isHidden + ' , danger: ' + game.fox.inDangerZone);
            window.app.animateShoeThrow();
          }
       }
@@ -439,7 +459,7 @@ var movementFunctionality = {
     this.pos += .6;
     // fox's pos is increased by eleven
     // console.log(fox.getPos());
-    fox.updatePos();
+    game.fox.updatePos();
     // console.log(fox.getPos());
   }
 };
@@ -447,13 +467,15 @@ var movementFunctionality = {
 // game object holds variables and methods essential to the game flow
 var game = {
   // current turn #
+  fox: {},
+  farmer: {},
   numOfTurn: 1,
   updateNumOfTurn: function() {
     this.numOfTurn++;
   },
   checkStatus: function() {
-    var foxPoints = fox.getPoints(),
-        farmerPoints = farmer.getPoints();
+    var foxPoints = game.fox.getPoints(),
+        farmerPoints = game.farmer.getPoints();
         if(foxPoints === 0 || farmerPoints === 0) {
           return true;
         }
@@ -462,7 +484,3 @@ var game = {
         }
   }
 };
-
-// TESTING: MOVE TO START GAME FUNC EVENTUALLY!
-var fox = new Player.fox();
-var farmer = new Player.farmer();

@@ -27,8 +27,8 @@
 *Win state:*
 - Fox wins when he has stolen all the eggs (eggs = 0)
 
-*Lose state: *
-- Fox loses when he has been caught ten times (HP = 0)
+*Lose state:*
+- Fox loses when he has been caught three times (HP = 0)
 
 *Implementation:*
 - HTML, CSS and JQuery to visualize and animate the game flow in the browser
