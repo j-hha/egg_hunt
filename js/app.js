@@ -8,16 +8,27 @@ $(function() {
     $gameBoard: $('#game-board'),
     // the fox img
     $fox: $('#fox'),
+    // fox's health points in status bar
     $health: $('#health'),
+    // current num of turn in status bar
     $turn: $('#turn'),
+    // remaining eggs in status bar
     $eggs: $('#eggs'),
+    // moon div
     $moon: $('#moon'),
+    // start button
     $start: $('#start'),
+    // boot img
     $shoe: $('#shoe'),
+    // hen house img
     $henHouse: $('#hen-house'),
+    // article below game board containing instructions and game options
     $article: $('article'),
+    // main section of the page (game board and status bar)
     $main: $('main'),
+    // creates a div to hold Fiona fox's comments (pops up if boot is thrown or if hen house reached)
     $message: $('<div>').attr('id', 'message'),
+    // win / lose message, pops up at end of game
     $gameEnd: $('<div>').attr('id', 'gameEnd'),
   };
 
@@ -28,25 +39,30 @@ $(function() {
       // returns object with current coordinates for left and top of element
       return element.offset();
     },
+    // initializes the key currentIndexOfBush and sets it to zero --> needed for compare method below
     currentIndexOfBush: 0,
-    // function compares coordinates of fox and hiding spot
+    // function compares coordinates of fox and nearest hiding spot
     compareCoordinates: function() {
-      // objects with left and top coordinates of fox and bush elements stored in variables
+      // first element of the bush class array is stored in nearestBush variable
       var $nearestBush = $('.bush').eq(this.currentIndexOfBush),
+          // objects with left and top coordinates of fox and bush elements stored in variables
           coordinateFox = this.getCurrentPos(domElements.$fox),
           coordinateBush = this.getCurrentPos($nearestBush);
-
-      if(coordinateFox.left > coordinateBush.left + 5
-        && this.currentIndexOfBush < 4) {
-        this.currentIndexOfBush++
+      // compares current left position of fox to left position of nearest bush and increases the current index that is used to grab an element from the bush class array by one - UNLESS it is the last item in the bush array
+      // --> as soon as fox has passed the nearest bush, the next bush is set to $nearestBush
+      if (coordinateFox.left > coordinateBush.left + 5
+        && this.currentIndexOfBush < ($('.bush').length - 1)){
+          this.currentIndexOfBush++
+            console.log('fox left current hiding spot, next bush (element at index ' + this.currentIndexOfBush + ') is now being defined the nearest bush');
       }
 
-      // if fox is within 100px +/- of hiding spot, fox is considered hidden
+      // compares current left position of fox to left position of nearest bush and if fox is within 100px +/- of hiding spot, fox is considered hidden (true)
       if (coordinateFox.left >= coordinateBush.left - 100 && coordinateFox.left <= coordinateBush.left + 100) {
-        console.log('FOX IS HIDDEN');
+        console.log('fox is HIDDEN');
         fox.isHidden = true;
       } else {
         fox.isHidden = false;
+        console.log('fox is NOT hidden');
       }
     },
   };
@@ -147,13 +163,11 @@ $(function() {
     displayGameEndMessage: function(roundWinner) {
       domElements.$main.append(domElements.$gameEnd);
       if (roundWinner === 'fox') {
-        console.log('I AM PRINTING!');
         domElements.$gameEnd.text('Wooohooo! Fiona managed to get all the eggs. The little fox won this time!');
       } else if (roundWinner === 'farmer') {
-        console.log('I AM PRINTING, TOO!');
         domElements.$gameEnd.text('Farmer Firmus has succeeded! Fiona will look for dinner elsewhere.');
       } else {
-        domElements.$gameEnd.text('Fiona managed to eat all the eggs, but is too scared to come back for more? How did that happen?!');
+        domElements.$gameEnd.text('A tie?? How did that happen?! You should not be seeing this!');
       }
     },
     handleRoundUpdates: function(roundLoser) {
@@ -265,7 +279,7 @@ $(function() {
 var Player = {
   basicPlayer: function() {
     // private property stores initial # health points or eggs, is inherited by fox and farmer
-    var points = 5,
+    var points = 3,
     // sets var self equal to this
         self = this;
 
@@ -275,7 +289,7 @@ var Player = {
     };
 
     self.resetPoints = function() {
-      points = 5;
+      points = 3;
     };
 
     // public method reduces # of points when called
@@ -400,7 +414,6 @@ var game = {
     this.numOfTurn++;
   },
   checkStatus: function() {
-    console.log('being called!');
     var foxPoints = fox.getPoints(),
         farmerPoints = farmer.getPoints();
         if(foxPoints === 0 || farmerPoints === 0) {
