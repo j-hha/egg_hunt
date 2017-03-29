@@ -192,8 +192,10 @@ $(function() {
       viewUpdates.foxAnimation();
       // event listener for moving fox is reattached
       $(document).on('keydown', eventHandlers.moveFox);
-      // farmer is set back to active
-      game.farmer.wakeUp();
+      // farmer throwing boot method is activated again if user is playing against the computer
+      if (game.farmer.getPlayer() !== 'human') {
+        game.farmer.wakeUp();
+      }
     },
     // method displays final win/lose message when called, takes parameter winner to make sure correct message gets displayed
     displayGameEndMessage: function(winner) {
@@ -326,6 +328,19 @@ $(function() {
       viewUpdates.updateStatusBar(game.farmer);
       game.numOfTurn = 1;
       viewUpdates.updateTurn();
+      // gets user input to determin if user wants to play against computer or a friend
+      var userInput = $('input[type=radio][name=player]:checked').val();
+      console.log(userInput);
+      // conditional determins if farmer is played by computer or human based on user input
+        if (userInput === 'human') {
+          // CREATE EVENT LISTENER AND HANDLER
+          game.farmer = new Player.farmer(userInput);
+          console.log(game.farmer);
+        } else {
+          game.farmer = new Player.farmer();
+          // method for farmer throwing shoes is called
+          game.farmer.wakeUp();
+        }
       // fox is set back to initial position
       viewUpdates.resetViewForNewTurn();
       // win / lose message is removed (in case user hits reset after winning or losing the game)
@@ -403,6 +418,11 @@ var Player = {
         player = typeOfPlayer,
         // private property tracks if farmer can be awoken (true) or not (false)
         canBeWokenUp = true;
+
+    // method returns value of player
+    self.getPlayer = function() {
+        return player;
+      };
     // declares public property called automatic to be used later for clearing interval of method that makes farmer throw shoe
     self.automatic;
     // method with logic for throwing boot
