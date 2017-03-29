@@ -30,6 +30,11 @@ $(function() {
     $message: $('<div>').attr('id', 'message'),
     // win / lose message, pops up at end of game
     $gameEnd: $('<div>').attr('id', 'gameEnd'),
+    $menu: {
+      about: $('#aboutText'),
+      instructions: $('#instructionsText'),
+      options: $('#optionsText'),
+    }
   };
 
   // object holding functions relevant to the game logic
@@ -253,17 +258,16 @@ $(function() {
         // game is reset for new round after 2 seconds
         setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);      }
     },
-//     toggleArticleText: function() {
-//       $(this).
-//       $article.html('');
-//       if($(this).text() === 'about') {
-// //
-//       } else if($(this).text() === 'instructions') {
-// //
-//       } else if($(this).text() === 'options') {
-//         //
-//       }
-//     },
+    showMenuText: function(element) {
+      for (var key in domElements.$menu) {
+        if (element === key) {
+          domElements.$menu[key].show();
+        }
+        if (element !== key) {
+          domElements.$menu[key].hide();
+        }
+      }
+    }
   };
 
   // object stores event handlers
@@ -355,11 +359,17 @@ $(function() {
       viewUpdates.resetViewForNewTurn();
       // win / lose message is removed (in case user hits reset after winning or losing the game)
       domElements.$gameEnd.remove();
+    },
+    toggleMenuText: function() {
+      var element = $(this).text();
+      viewUpdates.showMenuText(element);
     }
   };
 
   // initial event listener for the start button, starts game if button is pressed
   domElements.$start.on('click', eventHandlers.startGame);
+  $('.menu').on('click', eventHandlers.toggleMenuText);
+
 
 
   // attaches jquery functions that need to be available in vanilla JS part too to the window object to make them gobally available
