@@ -207,6 +207,7 @@ th span {
   box-shadow: .1em .1em .3em #808080;
   font-size: 1em;
   border-radius: .3em;
+  transform: rotate(7deg);
 }
 
 #start:hover {
@@ -275,6 +276,10 @@ footer {
 
   #game-board {
     height: 15em;
+  }
+
+  #fox {
+    width: 15%;
   }
 
   #grass {
