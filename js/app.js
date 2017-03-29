@@ -182,21 +182,29 @@ $(function() {
         domElements.$fox.css('opacity', '1');
       }
     },
+    // method resets game state for new turn but NOT the points
     resetViewForNewTurn: function() {
+      // nearest bush is set back to bush at index 0
       gameLogic.currentIndexOfBush = 0;
+      // fox and background are set back to starting positions
       fox.resetPos();
       movementFunctionality.pos = 0;
       viewUpdates.foxAnimation();
+      // event listener for moving fox is reattached
       $(document).on('keydown', eventHandlers.moveFox);
+      // farmer is set back to active
       farmer.wakeUp();
     },
-    displayGameEndMessage: function(roundWinner) {
+    // method displays final win/lose message when called, takes parameter winner to make sure correct message gets displayed
+    displayGameEndMessage: function(winner) {
+      //appends message div to the main section on the page
       domElements.$main.append(domElements.$gameEnd);
-      if (roundWinner === 'fox') {
+      // conditional handles which message to display based on winner parameter
+      if (winner === 'fox') {
         domElements.$gameEnd.text('Wooohooo! Fiona managed to get all the eggs. The little fox won this time!');
-      } else if (roundWinner === 'farmer') {
+      } else if (winner === 'farmer') {
         domElements.$gameEnd.text('Farmer Firmus has succeeded! Fiona will look for dinner elsewhere.');
-      } else {
+      } else { /* technically, the case tie shouldn't exist given my game logic ... */
         domElements.$gameEnd.text('A tie?? How did that happen?! You should not be seeing this!');
       }
     },
