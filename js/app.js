@@ -283,48 +283,59 @@ $(function() {
       // method checks if fox has reached hen house
       viewUpdates.evaluateEggHunt();
     },
-    //START GAME FUNCTION!
+    //method starts the game
     startGame: function() {
+      // fox object is generated
       game.fox = new Player.fox();
-      game.farmer = new Player.farmer();
-      // TESTING: MOVE TO START GAME FUNC EVENTUALLY!
-      ///GET PLAYER INFO
-        // if (player === 'human') {
+      // gets user input to determin if user wants to play against computer or a friend
+      // var userInput = ... .val();
+      // conditional determins if farmer is played by computer or human based on user input
+        // if (userInput === 'human') {
         //   // CREATE SPECIAL EVENT HANDLER
+        //   game.farmer = new Player.farmer(userInput);
         // } else {
-          game.farmer.wakeUp();
+          game.farmer = new Player.farmer();
         // }
+        // creates an event listener for moving the fox on key down
         $(document).on('keydown', eventHandlers.moveFox);
-        $(this).text('reset');
-        $(this).off('click', eventHandlers.startGame);
-        $(this).on('click', eventHandlers.resetAll);
-        // eventually move into start game func
+        // status bar is being set to initial values for points and round #
         viewUpdates.updateStatusBar(game.fox);
         viewUpdates.updateStatusBar(game.farmer);
         viewUpdates.updateTurn();
+        // bushes are generated
         viewUpdates.generateSafeZones();
-
+        // method for farmer throwing shoes is called
+        game.farmer.wakeUp();
+        // text of button is changed from start to reset
+        $(this).text('reset');
+        // start game event listener is removed to button
+        $(this).off('click', eventHandlers.startGame);
+        // reset game event listener is attached to button
+        $(this).on('click', eventHandlers.resetAll);
     },
+    // method resets entire game to initial state
     resetAll: function() {
+      // method that lets farmer throw shoes is stopped
       clearInterval(game.farmer.automatic);
+      // points and round # are reset to initial values
       game.farmer.resetPoints();
       game.fox.resetPoints();
       viewUpdates.updateStatusBar(game.fox);
       viewUpdates.updateStatusBar(game.farmer);
       game.numOfTurn = 1;
       viewUpdates.updateTurn();
+      // fox is set back to initial position
       viewUpdates.resetViewForNewTurn();
+      // win / lose message is removed (in case user hits reset after winning or losing the game)
       domElements.$gameEnd.remove();
     }
   };
 
-
-  //eventListeners
+  // initial event listener for the start button, starts game if button is pressed
   domElements.$start.on('click', eventHandlers.startGame);
 
 
-
-  // stores jquery functions that need to be available in vanilla JS part too
+  // attaches jquery functions that need to be available in vanilla JS part too to the window object to make them gobally available
   window.app = {};
   window.app.handleRoundUpdates = viewUpdates.handleRoundUpdates;
   window.app.animateShoeThrow = viewUpdates.animateShoeThrow;
@@ -340,16 +351,14 @@ var Player = {
     var points = 3,
     // sets var self equal to this
         self = this;
-
     // public method returns current # of points
     self.getPoints = function() {
       return points;
     };
-
+    // public method resets current # of points
     self.resetPoints = function() {
       points = 3;
     };
-
     // public method reduces # of points when called
     self.updatePoints = function() {
       points--;
@@ -360,13 +369,10 @@ var Player = {
   fox: function() {
     // inherits from basicPlayer
     Player.basicPlayer.call(this);
-
     // sets var self equal to this
     var self = this;
-
     // initial starting position on screen
     var pos = 3;
-
     // public method returns current # of points
     self.getPos = function() {
       return pos;
@@ -379,7 +385,6 @@ var Player = {
     self.updatePos = function() {
       pos += .3;
     };
-
     // tracks if fox is hidden (true) or not (false)
     self.isHidden = false;
     // tracks if fox is in a danger zone (true) or not (false)
@@ -390,17 +395,17 @@ var Player = {
   farmer: function(typeOfPlayer) {
     // inhertis from basicPlayer
     Player.basicPlayer.call(this);
-
     // sets var self equal to this
     var self = this,
         // private property stores info if farmer is played by human player or computer
         player = typeOfPlayer,
         // private property tracks if farmer can be awoken (true) or not (false)
         canBeWokenUp = true;
-
+    // declares public property called automatic to be used later for clearing interval of method that makes farmer throw shoe
     self.automatic;
-
+    // method with logic for throwing boot
     self.throwShoe = function() {
+      // action only happens if privat key canBeWokenUp is set to true
       if (canBeWokenUp) {
         // random number representing shoe throw accuracy
         var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
@@ -416,7 +421,7 @@ var Player = {
           // in all other cases, chance to scare off is 50%
           chance = 5;
         }
-        // compares farmers shot to chance current chance to hit and logs result
+        // compares farmers shot to chance current chance to hit, logs result and runs respective animation
          if (accuracyOfThrow <= chance) {
            console.log('HIT ' + accuracyOfThrow + ' hidden: ' + game.fox.isHidden + ' , danger: ' + game.fox.inDangerZone);
            window.app.animateShoeThrow('success');
@@ -427,11 +432,11 @@ var Player = {
          }
       }
     };
-
+    // method handles boot throwing based on boolean value of canBeWokenUp
     self.wakeUp = function() {
+      // if human player:
       if (player === 'human') {
-        // if human player:
-        // farmer can be awakened every 10 sec (true)
+        // farmer can be awakened every 12 sec (true)
         // user has two seconds to hit key to throw shoe
         // farmer goes back to sleep (false)
         if (canBeWokenUp) {
@@ -442,7 +447,7 @@ var Player = {
           console.log('Sorry! Farmer is fast asleep!');
         }
       } else {
-        // if player === computer: farmer awaken every 10 secs and throws show automatically
+        // if player === computer: farmer awaken every 12 secs and throws show automatically
         self.automatic = setInterval(self.throwShoe, 12000);
       }
     };
@@ -458,28 +463,32 @@ var movementFunctionality = {
     // background pos is increased by ten
     this.pos += .6;
     // fox's pos is increased by eleven
-    // console.log(fox.getPos());
     game.fox.updatePos();
-    // console.log(fox.getPos());
   }
 };
 
 // game object holds variables and methods essential to the game flow
 var game = {
-  // current turn #
+  // initializes keys for farmer and fox objects, will be filled with correct object when start button is being pressed
   fox: {},
   farmer: {},
+  // current turn #
   numOfTurn: 1,
+  // method updates # of turn
   updateNumOfTurn: function() {
     this.numOfTurn++;
   },
+  // method checks if one of the players has won
   checkStatus: function() {
+    // compares fox's points and farmer's points
     var foxPoints = game.fox.getPoints(),
         farmerPoints = game.farmer.getPoints();
+        // if one or the other player has lost all points, method returns true and win/lose message will be displayed (handled in jQuery part)
         if(foxPoints === 0 || farmerPoints === 0) {
           return true;
         }
         else {
+          // if points > 0, method returns false and game can continue
           return false;
         }
   }
