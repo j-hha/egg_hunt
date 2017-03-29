@@ -269,21 +269,29 @@ $(function() {
   // object stores event handlers
   var eventHandlers = {
     // function moves background behind fox from right to left when right arrow is pressed --> fox moves in opposite direction in order to ensure that fox always remains visible --> gives impression that fox moves forward
+    attack: function() {
+      // binds event to 'a' key
+      if (event.which == 65) {
+        event.preventDefault();
+        // method for farmer throwing shoes is called
+        game.farmer.wakeUp();
+      }
+    },
     moveFox: function() {
       // binds event to right arrow key
-      if (event.which == 38) {
+      if (event.which == 39) {
         event.preventDefault();
+        // calls method that increases position
+        movementFunctionality.moveForward();
+        // calls method that updates view accordingly
+        viewUpdates.foxAnimation();
+        // method compares coordinates to determin if fox is currently hidden
+        gameLogic.compareCoordinates();
+        // method puts opacity on fox if isHidden is true and removes it if it is false
+        viewUpdates.camouflageFox();
+        // method checks if fox has reached hen house
+        viewUpdates.evaluateEggHunt();
       }
-      // calls method that increases position
-      movementFunctionality.moveForward();
-      // calls method that updates view accordingly
-      viewUpdates.foxAnimation();
-      // method compares coordinates to determin if fox is currently hidden
-      gameLogic.compareCoordinates();
-      // method puts opacity on fox if isHidden is true and removes it if it is false
-      viewUpdates.camouflageFox();
-      // method checks if fox has reached hen house
-      viewUpdates.evaluateEggHunt();
     },
     //method starts the game
     startGame: function() {
@@ -294,7 +302,8 @@ $(function() {
       console.log(userInput);
       // conditional determins if farmer is played by computer or human based on user input
         if (userInput === 'human') {
-          // CREATE EVENT LISTENER AND HANDLER
+          // creates an event listener for letting user throw boot when pressing key 'A'
+          $(document).on('keydown', eventHandlers.attack);
           game.farmer = new Player.farmer(userInput);
           console.log(game.farmer);
         } else {
@@ -333,7 +342,8 @@ $(function() {
       console.log(userInput);
       // conditional determins if farmer is played by computer or human based on user input
         if (userInput === 'human') {
-          // CREATE EVENT LISTENER AND HANDLER
+          // creates an event listener for letting user throw boot when pressing key 'A'
+          $(document).on('keydown', eventHandlers.attack);
           game.farmer = new Player.farmer(userInput);
           console.log(game.farmer);
         } else {
@@ -466,7 +476,7 @@ var Player = {
           canBeWokenUp = false;
           setTimeout(function() {canBeWokenUp = true;}, 12000);
         } else {
-          console.log('Sorry! Farmer is fast asleep!');
+          console.log('Farmer is fast asleep!');
         }
       } else {
         // if player === computer: farmer awaken every 12 secs and throws show automatically
