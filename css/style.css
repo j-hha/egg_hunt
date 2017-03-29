@@ -221,7 +221,6 @@ article {
   font-family: 'Open Sans Condensed', sans-serif;
   padding: 3em 5%;
   font-size: 1.5em;
-  display: none;
 }
 
 dl {
@@ -237,12 +236,14 @@ dd {
   margin-bottom: 1em;
 }
 
+#instructionsText {
+  display: none;
+}
+
 #optionsText {
   margin: auto;
   width: 50%;
-  display: flex;
-  justify-content: space-around;
-  align-self: center;
+  display: none;
 }
 
 footer {

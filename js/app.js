@@ -30,6 +30,7 @@ $(function() {
     $message: $('<div>').attr('id', 'message'),
     // win / lose message, pops up at end of game
     $gameEnd: $('<div>').attr('id', 'gameEnd'),
+    // object stores menu article elements, elements are listed as values, respective keys match text of menu list item
     $menu: {
       about: $('#aboutText'),
       instructions: $('#instructionsText'),
@@ -258,11 +259,15 @@ $(function() {
         // game is reset for new round after 2 seconds
         setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);      }
     },
+    // method for toggling menu articles into view, takes clicked list item's text as parameter
     showMenuText: function(element) {
+      // loops over object of menu article elements, elements are listed as values, respective keys match text of menu list item
       for (var key in domElements.$menu) {
+        // if the inner text of clicked menu list item is identical to key, respective article (value) is shown
         if (element === key) {
           domElements.$menu[key].show();
         }
+        // all other articles are hidden
         if (element !== key) {
           domElements.$menu[key].hide();
         }
@@ -360,14 +365,18 @@ $(function() {
       // win / lose message is removed (in case user hits reset after winning or losing the game)
       domElements.$gameEnd.remove();
     },
+    //event handler to toggle menu description text into view on click
     toggleMenuText: function() {
+      //gets text of clicked list item
       var element = $(this).text();
+      // calls function that shows/hides articles based on text of list item (= parameter)
       viewUpdates.showMenuText(element);
     }
   };
 
   // initial event listener for the start button, starts game if button is pressed
   domElements.$start.on('click', eventHandlers.startGame);
+  // event listener for menu list items, will toggle respective text into view
   $('.menu').on('click', eventHandlers.toggleMenuText);
 
 
