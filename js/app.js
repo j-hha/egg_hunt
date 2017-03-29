@@ -93,51 +93,79 @@ $(function() {
     },
     // updates status bar to reflect current turn #
     updateTurn: function() {
+      // clears html
       domElements.$turn.html('');
-
+      // appends current num of round
       domElements.$turn.append($('<span>').html('night ' + game.numOfTurn));
     },
+    // generates 5 bushes for fox to hide in
     generateSafeZones: function() {
+      // iterates 5 times
       for (var i = 1; i <= 5; i++) {
+        //creates a new div with the class name bush each time
         $newBush = $('<div>').addClass('bush');
+        //appends div to game board
         domElements.$gameBoard.append($newBush);
       }
-      $bush = $('.bush');
-      var left = 0;
+      // stores array of all elements with class name bush in variable $bush
+      var $bush = $('.bush'),
+      // initializes variable left with 0
+          left = 0;
+      // iterates over $bush array
       for (var i = 0; i < $bush.length; i++) {
+        // sets left to 33
         left += 33;
+        // positions bushes within 33% of each other
         $bush.eq(i).css('left', left + '%');
       }
     },
+    // method handles displaying foxes comments on hits/misses when farmer throws shoe and when fox has reached hen house, takes the respective message as a parameter
     displayMessage: function(content) {
+      // fills previously created message div with text from parameter
       domElements.$message.text(content);
+      // places message div 10% left of fox's current position
       domElements.$message.css('left', fox.getPos() + 10 + '%');
+      // appends message to game board
       domElements.$gameBoard.append(domElements.$message);
     },
+    // removes fox's comment from board again
     removeMessage: function() {
       domElements.$message.remove();
     },
+    // animation of farmer throwing a boot, takes a parameter to determin if farmer has hit or missed fox
     animateShoeThrow: function(success) {
+      // puts boot img 47% left of fox's current position
       domElements.$shoe.css('left', fox.getPos() + 47 + '%');
+      // makes image visible
       domElements.$shoe.show();
+      // conditional: determins what will happen if fox is hit
       if (success === 'success') {
+        // removes event listener for moving --> signals to user that round has ended, if game can continue, event listener will be reattched once reset for new round has happend
         $(document).off('keydown', eventHandlers.moveFox);
+        // calls displayMessage method with fox' retreat message as parameter
         viewUpdates.displayMessage('Oh oh! I better retreat!');
+        // moves boot to foxes current position
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
           top: 14 + 'em'},
           {duration: 1500});
+          // foxes message is removed after animation as ended
           setTimeout(viewUpdates.removeMessage, 2000);
-      } else {
+      } else { /* if farmer missed ... */
+        // calls displayMessage method with fox' message that farmer has missed as parameter
         viewUpdates.displayMessage('Ha! Not even close!');
+        // moves boot to top of screen above fox
         domElements.$shoe.animate(
           {left: fox.getPos() + '%',
           top: 0},
-          {duration: 2000});
+          {duration: 1500});
+          // foxes message is removed after animation as ended
           setTimeout(viewUpdates.removeMessage, 2000);
       }
+      //boot img is then set to display:none again
       domElements.$shoe.hide('slow');
     },
+    // animates fox's movement
     foxAnimation: function() {
       // updates position of background in css using value update from moveForward function
       domElements.$gameBoard.css('right', movementFunctionality.pos + '%');
@@ -145,10 +173,12 @@ $(function() {
       domElements.$fox.css('left', fox.getPos() + '%');
       domElements.$moon.css('left', fox.getPos() + '%');
     },
+    // method adds visible effect indicating that fox.isHidden is set to true
     camouflageFox: function() {
+      //puts an opacity on fox img when fox is hiding in a bush
       if (fox.isHidden) {
         domElements.$fox.css('opacity', '.3');
-      } else {
+      } else /* removes opacity from fox img when fox has left hiding spot */ {
         domElements.$fox.css('opacity', '1');
       }
     },
