@@ -87,14 +87,22 @@ th span {
   position: absolute;
   left: 200%;
   bottom: -.6em;
-  display: flex;
-  justify-content: center;
+  /*display: flex;
+  justify-content: center;*/
+}
+
+#sheep {
+  width: 14%;
+  position: absolute;
+  left: 80%;
+  bottom: -.2em;
+  opacity: .5;
 }
 
 #dog-house {
-  width: 4%;
+  width: 5%;
   position: absolute;
-  left: 50%;
+  left: 55%;
   bottom: 0em;
   display: flex;
   justify-content: center;
