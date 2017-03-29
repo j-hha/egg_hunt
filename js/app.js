@@ -288,14 +288,18 @@ $(function() {
       // fox object is generated
       game.fox = new Player.fox();
       // gets user input to determin if user wants to play against computer or a friend
-      // var userInput = ... .val();
+      var userInput = $('input[type=radio][name=player]:checked').val();
+      console.log(userInput);
       // conditional determins if farmer is played by computer or human based on user input
-        // if (userInput === 'human') {
-        //   // CREATE SPECIAL EVENT HANDLER
-        //   game.farmer = new Player.farmer(userInput);
-        // } else {
+        if (userInput === 'human') {
+          // CREATE EVENT LISTENER AND HANDLER
+          game.farmer = new Player.farmer(userInput);
+          console.log(game.farmer);
+        } else {
           game.farmer = new Player.farmer();
-        // }
+          // method for farmer throwing shoes is called
+          game.farmer.wakeUp();
+        }
         // creates an event listener for moving the fox on key down
         $(document).on('keydown', eventHandlers.moveFox);
         // status bar is being set to initial values for points and round #
@@ -304,8 +308,6 @@ $(function() {
         viewUpdates.updateTurn();
         // bushes are generated
         viewUpdates.generateSafeZones();
-        // method for farmer throwing shoes is called
-        game.farmer.wakeUp();
         // text of button is changed from start to reset
         $(this).text('reset');
         // start game event listener is removed to button
