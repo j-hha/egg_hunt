@@ -219,12 +219,14 @@ th span {
 
 article {
   font-family: 'Open Sans Condensed', sans-serif;
-  padding: 3em 5%;
+  padding: 3em 1%;
   font-size: 1.5em;
+  width: 70%;
+  margin: auto;
 }
 
 dl {
-  text-align: center;
+  text-align: justify;
 }
 
 dt {
@@ -241,8 +243,7 @@ dd {
 }
 
 #optionsText {
-  margin: auto;
-  width: 50%;
+  text-align: center;
   display: none;
 }
 
