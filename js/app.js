@@ -148,9 +148,9 @@ $(function() {
       if (success === 'success') {
         // removes event listener for moving --> signals to user that round has ended, if game can continue, event listener will be reattched once reset for new round has happend
         $(document).off('keydown', eventHandlers.moveFox);
-        $(document).off('taphold', eventHandlers.moveFox);
+        $(document).off('tap', eventHandlers.moveFox);
         // calls displayMessage method with fox' retreat message as parameter
-        viewUpdates.displayMessage('Oh oh! I better retreat!');
+        viewUpdates.displayMessage('Oh oh! I will retreat and try again next night.');
         // moves boot to foxes current position
         domElements.$shoe.animate(
           {left: game.fox.getPos() + '%',
@@ -199,7 +199,7 @@ $(function() {
       viewUpdates.foxAnimation();
       // event listener for moving fox is reattached
       $(document).on('keydown', eventHandlers.moveFox);
-      $(document).on('taphold', eventHandlers.moveFox);
+      $(document).on('tap', eventHandlers.moveFox);
       // farmer throwing boot method is activated again if user is playing against the computer
       if (game.farmer.getPlayer() !== 'human') {
         game.farmer.wakeUp();
@@ -254,7 +254,7 @@ $(function() {
       if (whereIsFox.left >= whereIsHenHouse.left-200) {
         // the event listener for moving fox is removed (--> signalling user, fox has won round)
         $(document).off('keydown', eventHandlers.moveFox);
-        $(document).off('taphold', eventHandlers.moveFox);
+        $(document).off('tap', eventHandlers.moveFox);
         // message is displayed signalling that fox has won round
         viewUpdates.displayMessage('DINNER TIME!');
         // message is removed again after 2 seconds
@@ -326,7 +326,7 @@ $(function() {
         }
         // creates an event listener for moving the fox on key down
         $(document).on('keydown', eventHandlers.moveFox);
-        $(document).on('taphold', eventHandlers.moveFox);
+        $(document).on('tap', eventHandlers.moveFox);
         // status bar is being set to initial values for points and round #
         viewUpdates.updateStatusBar(game.fox);
         viewUpdates.updateStatusBar(game.farmer);
