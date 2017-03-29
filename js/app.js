@@ -48,7 +48,7 @@ $(function() {
       } else {
         fox.isHidden = false;
       }
-    }
+    },
   };
 
   // object holding functions that update elements in the view
@@ -161,25 +161,18 @@ $(function() {
       viewUpdates.updateStatusBar(roundLoser);
       clearInterval(farmer.automatic);
       var gameOver = game.checkStatus();
-      console.log(gameOver);
       if (gameOver) {
         foxPoints = fox.getPoints(),
         farmerPoints = farmer.getPoints();
-        console.log('GAME OVER! ');
         if (foxPoints > farmerPoints) {
           viewUpdates.displayGameEndMessage('fox');
-          console.log('FOX WON!');
         } else if (farmerPoints > foxPoints) {
           viewUpdates.displayGameEndMessage('farmer');
-          console.log('FARMER WON!');
-        } else {
-          console.log("TIE!");
         }
       } else {
         game.updateNumOfTurn();
         viewUpdates.updateTurn();
         viewUpdates.resetViewForNewTurn();
-        viewUpdates.foxAnimation();
       }
     },
     evaluateEggHunt:  function() {
@@ -201,7 +194,7 @@ $(function() {
 //       } else if($(this).text() === 'options') {
 //         //
 //       }
-//     }
+//     },
   };
 
   // object stores event handlers
@@ -221,8 +214,6 @@ $(function() {
       viewUpdates.camouflageFox();
       viewUpdates.evaluateEggHunt();
     },
-
-
     //START GAME FUNCTION!
     //CAREFUL! CURRENTLY FARMER FUNCTION EXECUTES TWICE IF START IS DOUBLE-CLICKED! FIX!!!
     startGame: function() {
@@ -233,6 +224,21 @@ $(function() {
           farmer.wakeUp();
         // }
         $(document).on('keydown', eventHandlers.moveFox);
+        $(this).text('reset');
+        $(this).off('click', eventHandlers.startGame);
+        $(this).on('click', eventHandlers.resetAll);
+
+    },
+    resetAll: function() {
+      clearInterval(farmer.automatic);
+      farmer.resetPoints();
+      fox.resetPoints();
+      viewUpdates.updateStatusBar(fox);
+      viewUpdates.updateStatusBar(farmer);
+      game.numOfTurn = 1;
+      viewUpdates.updateTurn();
+      viewUpdates.resetViewForNewTurn();
+      domElements.$gameEnd.remove();
     }
   };
 
@@ -259,13 +265,17 @@ $(function() {
 var Player = {
   basicPlayer: function() {
     // private property stores initial # health points or eggs, is inherited by fox and farmer
-    var points = 1,
+    var points = 5,
     // sets var self equal to this
         self = this;
 
     // public method returns current # of points
     self.getPoints = function() {
       return points;
+    };
+
+    self.resetPoints = function() {
+      points = 5;
     };
 
     // public method reduces # of points when called
