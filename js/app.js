@@ -202,8 +202,13 @@ $(function() {
       viewUpdates.foxAnimation();
       // event listener for moving fox is reattached
       $(document).on('keydown', eventHandlers.moveFox);
-      // farmer throwing boot method is activated again if user is playing against the computer
-      if (game.farmer.getPlayer() !== 'human') {
+      // conditional checks if second player is human or computer
+      if (game.farmer.getPlayer() === 'human') {
+        // reattaches event listener for letting user throw boot when pressing key 'A'
+        console.log(game.farmer.getPlayer());
+        $(document).on('keydown', eventHandlers.attack);
+      } else {
+        // farmer throwing boot method is activated again if user is playing against the computer
         game.farmer.wakeUp();
       }
     },
@@ -256,6 +261,13 @@ $(function() {
       if (whereIsFox.left >= whereIsHenHouse.left-200) {
         // the event listener for moving fox is removed (--> signalling user, fox has won round)
         $(document).off('keydown', eventHandlers.moveFox);
+        if (game.farmer.getPlayer() === 'human') {
+          console.log(game.farmer.getPlayer());
+          // removes event listener for letting user throw boot when pressing key 'A'
+          $(document).off('keydown', eventHandlers.attack);
+        } else {
+          clearInterval(game.farmer.automatic);
+        }
         // message is displayed signalling that fox has won round
         viewUpdates.displayMessage('DINNER TIME!');
         // message is removed again after 2 seconds
