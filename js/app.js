@@ -263,12 +263,14 @@ $(function() {
       if (whereIsFox.left >= whereIsHenHouse.left-200) {
         // the event listener for moving fox is removed (--> signalling user, fox has won round)
         $(document).off('keydown', eventHandlers.moveFox);
+        // checks if farmer is being played by human
         var playerTypeFarmer = game.farmer.getPlayer();
         if (playerTypeFarmer === 'human') {
           console.log(playerTypeFarmer);
           // removes event listener for letting user throw boot when pressing key 'A'
           $(document).off('keydown', eventHandlers.attack);
         } else {
+          // if farmer played by computer, interval is cleared
           clearInterval(game.farmer.automatic);
         }
         // message is displayed signalling that fox has won round

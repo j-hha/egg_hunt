@@ -234,6 +234,10 @@ th span {
   transform: rotate(7deg);
 }
 
+#start:focus {
+  outline: 0;
+}
+
 #start:hover {
   background-color: rgb(255,134,39);
 }
