@@ -5,8 +5,7 @@
 This is a 1 - 2 player browser game built as an assignment for General Assembly's WDIR course. The user commands a hungry fox, who is trying to steal eggs from a hen house while being attacked by the farmer. In two player mode, the second player can take on the role of the farmer.
 
 
-![alt text][screenshot]
-[screenshot]: img/egg_hunt_screenshot.png "Egg Hunt screenshot"
+![alt text](img/egg_hunt_screenshot.png?raw=true "Egg Hunt screenshot")
 
 *Technologies used:*
 - HTML 5
