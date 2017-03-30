@@ -1,42 +1,37 @@
 # egg_hunt
 
-- Browser game, first project for GA WDIR course
+*Short Description*
+This is a 1 - 2 player browser game built as an assignment for General Assembly's WDIR course. The user commands a hungry fox, who is trying to steal eggs from a hen house while being attacked by the farmer. In two player mode, the second player can take on the role of the farmer.
 
-*Premise:* A hungry fox is looking for dinner. Can he make it to a barn to steal eggs without being caught by the farmer?
+*Technologies used*
+- HTML 5
+- CSS 3
+- Vanilla JavaScript
+- JQuery
+
+*Approach*
+
+The game follows a Mario Bros style flow: The fox can only move from left to right.
+
+To animate this motion, I used two nested html sections. The outer section takes up 100% of the browser width and I added a style overflow: hidden; the inner section (the game board) is twice as wide. But only part of it are visible. When the right pointing arrow key is pressed, the game board is being moved from right to left, while the fox (a positioned vector graphic nested inside the inner section) is being moved from left to right. This creates the impression that the fox is in motion while always remaining in the visible area.
+
+The foxes current position is then compared to the position of various elements on the game board (bushes, the hen house), to evaluate the current state of the game (Is the fox hidden? Has the fox reached the hen house?).
+
+The farmer's attacks are based on a random number that is generated each time, the attack function executes. However, the chances of hitting the fox, are based on the foxes current position on the game board (50% in the open field, 0% if the fox is hidden). In one player mode, the attacks are repeated automatically every 12 seconds. In two player mode, the user can trigger an attack at any point - however, each time the farmer throws a shoe, the user has to wait at least 12 seconds before they can strike again.
+
+The game consits of rounds (3-6). The opponents start out with three points each (health points for the fox, number of eggs in the hen house for the farmer). The points are decreased each time the fox is hit or steals an egg. If one player loses all points, the other player has one the game.
 
 *Players:*
 - The Fox (user)
 - The Farmer (computer)
 
-*Game flow:*
-- Fox starts out with 3 health points, position is on left hand side of screen, fox moves to right hand side of screen on key down
-- Barn with 3 eggs positioned on the right hand side of screen
-- Between barn and fox are several hiding spots for the fox, eg bush, tree
-- Fox has to make it to the barn to steal his dinner
-- BUT farmer regularly wakes up and throws shoes to scare fox off
-- additional difficulty: include 'danger zones' where farmer has a higher likelihood to hit
-- If fox has found cover when this happens, fox may move on
-- Else if fox has not taken cover, fox has a high random chance to be scared off by farmer, loses health point (HP) and loses the round
-- If fox makes it to the barn, farmer loses one egg and fox wins the round
+*Link to the Game*
+https://j-hha.github.io/egg_hunt/
 
-*Rounds to play:*  3 - 6 rounds
-- One round = one night
-- Night ends when fox is caught (round lost) or manages to steal an egg (round won)
-- If eggs && HP > 0 → fox gets a new chance the next night (→ new round)
-
-*Win state:*
-- Fox wins when he has stolen all the eggs (eggs = 0)
-
-*Lose state:*
-- Fox loses when he has been caught three times (HP = 0)
-
-*Implementation:*
-- HTML, CSS and JQuery to visualize and animate the game flow in the browser
-- Javascript for the game logic and to keep track of game state, etc
-- How to read the current position of an element on the page: https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-
-*Upgrades:*
-If time permits, I am planning to look into adding additional functionality:
-- two players!
-- getting game to work on hand held devices
-- improving responsive design
+*Taking it further*
+If I had more time, I would have attempted to include the following
+- a version for handheld devices
+  --> the theme of the site is responsive, the game, however, relies on using the keyboard
+- levels instead of rounds
+  --> right now, the game flow of each round always stays the same; with more time, I would have looked into ways to increase the difficulty each time a new level starts (e.g. by increasing the distance between the hiding spots)
+- more movement and attack options for the users (e.g. ducking, running)
