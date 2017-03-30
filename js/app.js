@@ -258,13 +258,17 @@ $(function() {
         viewUpdates.displayMessage('DINNER TIME!');
         // message is removed again after 2 seconds
         setTimeout(viewUpdates.removeMessage, 2000);
-        // game is reset for new round after 2 seconds
-        setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);      }
+        // game is reset for new round after 2 seconds, enough time for the user to read without interrupting the game flow for too long
+        setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);
+      }
     },
     // method for showing that the user cannot attack because the farmer is asleep
     farmerSnoozes: function() {
+      // puts previously created element 40% left of foxes current position
       domElements.$zZz.css('left', game.fox.getPos() + 40 + '%');
+      // appends element to the gameboard
       domElements.$gameBoard.append(domElements.$zZz);
+      // removes element after 4 seconds (css3 animation lasts 2 seconds, so this ensures that the css3 animation runs twice)
       setTimeout(function() {domElements.$zZz.remove()}, 4000);
     },
     // method for toggling menu articles into view, takes clicked list item's text as parameter
@@ -440,7 +444,7 @@ var Player = {
     self.resetPos = function() {
       pos = 3;
     };
-    // public method reduces # of points when called
+    // public method increases fox's position by .3 --> this is the percentage needed to make the motion animation work without moving the fox out of the view (--> fox appears to move but always stays at the same spot within the browser window)
     self.updatePos = function() {
       pos += .3;
     };
@@ -471,7 +475,7 @@ var Player = {
     self.throwShoe = function() {
       // action only happens if privat key canBeWokenUp is set to true
       if (canBeWokenUp) {
-        // random number representing shoe throw accuracy
+        // random number between 1 and 10 representing shoe throw accuracy, if hit will be determined in the following conditional
         var accuracyOfThrow = Math.round(Math.random() * (10-1) + 1),
             chance;
         // chances of scaring fox off
@@ -526,9 +530,9 @@ var movementFunctionality = {
   pos: 0,
   // method updates pos for background and fox
   moveForward: function() {
-    // background pos is increased by ten
+    // background pos is increased by .6 --> this makes background move at a rate that will create the appreance that fox is moving, but fox will always stay in the view
     this.pos += .6;
-    // fox's pos is increased by eleven
+    // fox's pos is increased by .3 --> this makes fox move at a rate that ensures that fox will always stay in the view
     game.fox.updatePos();
   }
 };
