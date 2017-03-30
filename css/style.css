@@ -123,6 +123,22 @@ th span {
   to {transform: rotate(2520deg);}
 }
 
+#snooze {
+  width: 10%;
+  position: absolute;
+  top: 1em;
+  font-size: 4em;
+  animation-name: zZz;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes zZz {
+  from {transform: scale(0)}
+  to {transform: scale(1.5);}
+}
+
 #fox {
   width: 10%;
   position: absolute;

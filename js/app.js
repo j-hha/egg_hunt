@@ -30,6 +30,8 @@ $(function() {
     $message: $('<div>').attr('id', 'message'),
     // win / lose message, pops up at end of game
     $gameEnd: $('<div>').attr('id', 'gameEnd'),
+    // snooze message, pops up when user tries to attack but farmer is asleep
+    $zZz: $('<div id="snooze">zZz</div>'),
     // object stores menu article elements, elements are listed as values, respective keys match text of menu list item
     $menu: {
       about: $('#aboutText'),
@@ -259,6 +261,12 @@ $(function() {
         // game is reset for new round after 2 seconds
         setTimeout(function(){viewUpdates.handleRoundUpdates(game.farmer);}, 2000);      }
     },
+    // method for showing that the user cannot attack because the farmer is asleep
+    farmerSnoozes: function() {
+      domElements.$zZz.css('left', game.fox.getPos() + 40 + '%');
+      domElements.$gameBoard.append(domElements.$zZz);
+      setTimeout(function() {domElements.$zZz.remove()}, 4000);
+    },
     // method for toggling menu articles into view, takes clicked list item's text as parameter
     showMenuText: function(element) {
       // loops over object of menu article elements, elements are listed as values, respective keys match text of menu list item
@@ -283,7 +291,11 @@ $(function() {
       if (event.which == 65) {
         event.preventDefault();
         // method for farmer throwing shoes is called
-        game.farmer.wakeUp();
+        var awake = game.farmer.wakeUp();
+        if (!awake) {
+          viewUpdates.farmerSnoozes();
+          console.log('Farmer is fast asleep!');
+        }
       }
     },
     moveFox: function() {
@@ -392,6 +404,7 @@ $(function() {
 
 // player object
 var Player = {
+  // constructor for basic player object
   basicPlayer: function() {
     // private property stores initial # health points or eggs, is inherited by fox and farmer
     var points = 3,
@@ -494,12 +507,14 @@ var Player = {
           self.throwShoe();
           canBeWokenUp = false;
           setTimeout(function() {canBeWokenUp = true;}, 12000);
+          return true;
         } else {
-          console.log('Farmer is fast asleep!');
+          return false;
         }
       } else {
         // if player === computer: farmer awaken every 12 secs and throws show automatically
         self.automatic = setInterval(self.throwShoe, 12000);
+        return true;
       }
     };
   }
