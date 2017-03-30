@@ -26,6 +26,8 @@ $(function() {
     $article: $('article'),
     // main section of the page (game board and status bar)
     $main: $('main'),
+    // status bar showing scores
+    $scoreTable: $('table'),
     // creates a div to hold Fiona fox's comments (pops up if boot is thrown or if hen house reached)
     $message: $('<div>').attr('id', 'message'),
     // win / lose message, pops up at end of game
@@ -338,6 +340,8 @@ $(function() {
         }
         // creates an event listener for moving the fox on key down
         $(document).on('keydown', eventHandlers.moveFox);
+        // shows status bar
+        domElements.$scoreTable.css('visibility', 'visible');
         // status bar is being set to initial values for points and round #
         viewUpdates.updateStatusBar(game.fox);
         viewUpdates.updateStatusBar(game.farmer);

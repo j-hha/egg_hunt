@@ -52,15 +52,24 @@ main {
 
 table {
   width: 100%;
+  visibility: hidden;
 }
 
 th {
   font-size: 2em;
-  width: 33.3%;
+  width: 28%;
 }
 
 th span {
   padding: 1%;
+}
+
+.thumbnail {
+  width: 8%;
+}
+
+.thumbnail img {
+  height: 2em;
 }
 
 #game-board {
@@ -132,7 +141,6 @@ th span {
   animation-duration: 2s;
   animation-iteration-count: infinite;
 }
-
 
 @keyframes zZz {
   from {transform: scale(0)}
