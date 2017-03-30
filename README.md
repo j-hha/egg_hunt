@@ -1,19 +1,22 @@
 # egg_hunt
 
-*Short Description*
+*Short Description:*
+
 This is a 1 - 2 player browser game built as an assignment for General Assembly's WDIR course. The user commands a hungry fox, who is trying to steal eggs from a hen house while being attacked by the farmer. In two player mode, the second player can take on the role of the farmer.
 
-*Technologies used*
+
+![alt text][screenshot]
+[screenshot]: img/egg_hunt_screenshot.png "Egg Hunt screenshot"
+
+*Technologies used:*
 - HTML 5
 - CSS 3
 - Vanilla JavaScript
 - JQuery
 
-*Approach*
+*Approach:*
 
-The game follows a Mario Bros style flow: The fox can only move from left to right.
-
-To animate this motion, I used two nested html sections. The outer section takes up 100% of the browser width and I added a style overflow: hidden; the inner section (the game board) is twice as wide. But only part of it are visible. When the right pointing arrow key is pressed, the game board is being moved from right to left, while the fox (a positioned vector graphic nested inside the inner section) is being moved from left to right. This creates the impression that the fox is in motion while always remaining in the visible area.
+The game follows a Mario Bros style flow: The fox can only move from left to right. To animate this motion, I used two nested html sections. The outer section takes up 100% of the browser width and I added a style overflow: hidden; the inner section (the game board) is twice as wide. But only part of it are visible. When the right pointing arrow key is pressed, the game board is being moved from right to left, while the fox (a positioned vector graphic nested inside the inner section) is being moved from left to right. This creates the impression that the fox is in motion while always remaining in the visible area.
 
 The foxes current position is then compared to the position of various elements on the game board (bushes, the hen house), to evaluate the current state of the game (Is the fox hidden? Has the fox reached the hen house?).
 
@@ -23,7 +26,7 @@ The game consits of rounds (3-6). The opponents start out with three points each
 
 *Players:*
 - The Fox (user)
-- The Farmer (computer)
+- The Farmer (computer or second user)
 
 *Link to the Game*
 https://j-hha.github.io/egg_hunt/
