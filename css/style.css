@@ -118,6 +118,14 @@ th:nth-of-type(4) {
   opacity: .5;
 }
 
+#laundry-line {
+  width: 14%;
+  position: absolute;
+  left: 114%;
+  bottom: -1em;
+  opacity: .7;
+}
+
 #dog-house {
   width: 5%;
   position: absolute;
