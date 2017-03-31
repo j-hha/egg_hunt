@@ -101,13 +101,18 @@ th:nth-of-type(4) {
   left: 3%;
 }
 
+#farm-house {
+  width: 14%;
+  position: absolute;
+  left: 190%;
+  bottom: -.6em;
+}
+
 #hen-house {
   width: 8%;
   position: absolute;
-  left: 200%;
+  left: 180%;
   bottom: -.6em;
-  /*display: flex;
-  justify-content: center;*/
 }
 
 #sheep {
@@ -174,7 +179,7 @@ th:nth-of-type(4) {
 
 .bush {
   width: 10%;
-  height: 9em;
+  height: 8em;
   position: absolute;
   bottom: -2em;
   background-image: url("../img/bush.svg");
@@ -185,7 +190,7 @@ th:nth-of-type(4) {
 
 #grass {
   width: 250%;
-  height: 4em;
+  height: 3em;
   background-image: url("../img/grass.svg");
   background-position: top;
   background-size: contain;
