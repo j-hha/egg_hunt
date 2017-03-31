@@ -21,7 +21,11 @@ The foxes current position is then compared to the position of various elements 
 
 The farmer's attacks are based on a random number that is generated each time, the attack function executes. However, the chances of hitting the fox, are based on the foxes current position on the game board (50% in the open field, 0% if the fox is hidden). In one player mode, the attacks are repeated automatically every 12 seconds. In two player mode, the user can trigger an attack at any point - however, each time the farmer throws a shoe, the user has to wait at least 12 seconds before they can strike again.
 
-The game consits of rounds (3-6). The opponents start out with three points each (health points for the fox, number of eggs in the hen house for the farmer). The points are decreased each time the fox is hit or steals an egg. If one player loses all points, the other player has won the game.
+The game consists of rounds (3-6). The opponents start out with three points each (health points for the fox, number of eggs in the hen house for the farmer). The points are decreased each time the fox is hit or steals an egg. If one player loses all points, the other player has won the game.
+
+I tried to adhere to an object oriented approach, to make a clear distinction between the pure vanilla JavaScript part and the jQuery part and to keep my code as dry as possible ( - with obvious limitations, given the little programming experience I currently have).
+
+The images used in this game are hand drawn. I converted them into vector graphics using gimp.
 
 *Link to the Game:*
 
@@ -33,5 +37,5 @@ If I had more time, I would have attempted to include the following
 - a version for handheld devices
   --> the theme of the site is responsive, the game, however, relies on using the keyboard
 - levels instead of rounds
-  --> right now, the game flow of each round always stays the same; with more time, I would have looked into ways to increase the difficulty each time a new level starts (e.g. by increasing the distance between the hiding spots)
+  --> right now, the game flow of each round always stays the same; with more time, I would have looked into ways to increase the difficulty each time a new level starts (e.g. by including 'danger zones' (--> higher chance that farmer will hit certain areas), increasing the distance between the hiding spots)
 - more movement and attack options for the users (e.g. ducking, running)
