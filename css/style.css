@@ -115,6 +115,14 @@ th:nth-of-type(4) {
   bottom: -.6em;
 }
 
+#cow {
+  width: 12%;
+  position: absolute;
+  left: 150%;
+  bottom: -1em;
+  opacity: .6;
+}
+
 #sheep {
   width: 14%;
   position: absolute;
